@@ -1,0 +1,40 @@
+.navbar {
+    background-color: #DDD;
+    padding: 9px;
+    text-align: center;
+}
+
+#navbar-logout {
+    color: rgb(130, 130, 130);
+}
+
+.navbar-logout-div {
+    overflow-wrap: break-word;
+}
+
+.navbar a {
+    margin: 15px;
+    color: rgb(130, 130, 130);
+    display: inline-block;
+
+}
+
+.navbar a.active {
+    color: rgb(183, 183, 183);
+}
+
+.navbar-brand {
+    position: relative;
+    left: 28px;
+}
+
+/* .navbar-items {
+    font-size: 14px;
+} */
+
+/* .navbar a {
+    margin: 10px 13px;
+    color: rgb(183, 183, 183);
+    display: inline-block;
+
+} */

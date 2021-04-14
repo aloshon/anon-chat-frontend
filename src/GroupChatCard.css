@@ -1,0 +1,33 @@
+
+.mt-4.group-chat-card {
+    margin-top: 10px;
+    height: 300px;
+}
+.group-chat-card-header {
+    margin: 5px;
+    color: #666666;
+    overflow: auto;
+    max-height: 100px;
+}
+
+.group-chat-card-body {
+    height: 140px;
+    overflow: auto;
+    margin-bottom: 0px;
+    text-align: left;
+}
+
+.group-chat-card-footer {
+    position: relative;
+    bottom: 0;
+}
+
+@media (min-width: 900px) {
+    .mt-4.group-chat-card {
+        display:inline-block;
+        width: 47%;
+        vertical-align: top;
+        margin-left: 10px;
+    }
+}
+

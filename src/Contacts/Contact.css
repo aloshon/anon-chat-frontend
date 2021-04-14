@@ -1,0 +1,22 @@
+.contact-card.card {
+    position: relative;
+    top: 25px;
+    margin: 15px;
+}
+
+@media (min-width: 1000px) {
+    /* .group-chat-card {
+        position: relative;
+        display: inline-block;
+        width: 49%;
+        vertical-align: top;
+    } */
+
+    .contact-card.card {
+        display:inline-block;
+        width: 47%;
+        padding-bottom: 20px;
+        vertical-align: top;
+        margin-left: 10px;
+    }
+}

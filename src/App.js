@@ -1,24 +1,80 @@
-import logo from './logo.svg';
+import React, {useState, useEffect} from "react";
 import './App.css';
+import Routes from './Routes';
+import NavBar from './Nav';
+import useLocalStorage from "./Hooks/useLocalStorage";
+import jwt from "jsonwebtoken";
+import AnonChatApi from "./api";
+import UserContext from "./UserContext";
 
 function App() {
+  const [user, setUser] = useState(null);
+  const [token, setToken] = useLocalStorage("token", null);
+
+  useEffect(function getUserFromToken() {
+    async function getUser() {
+      if(token){
+        try{
+          let {username} = jwt.decode(token);
+          // insert the token onto the API class
+          AnonChatApi.token = token;
+          let currentUser = await AnonChatApi.getUser(username);
+          console.log(currentUser)
+          setUser(currentUser);
+        } catch (e) {
+          console.error(e);
+          // Logout user if any errors encountered while getting the token
+          setUser(null);
+        }
+      }
+    }
+
+    getUser();
+  }, [token]);
+
+  // Try to set token and sign up user, if error occurs,
+  // display it in console and throw error
+  // If successful then the page redirect and user is signed in
+  async function signup(data) {
+    try {
+      let token = await AnonChatApi.getSignup(data);
+      setToken(token);
+      localStorage.setItem("token", token);
+      return true;
+    } catch (e) {
+      console.error(`Error Signing In: ${e}`);
+      throw new Error(`ERROR SIGNING IN!: ${e}`);
+    }
+  }
+
+  // Try to set token, if error occurs, display it in console and throw error
+  // If successful then the page redirect and user is logged in
+  async function login(data) {
+    try {
+      let token = await AnonChatApi.getLogin(data);
+      setToken(token);
+      return true;
+    } catch (e) {
+      console.error(`Error Logging In: ${e}`);
+      throw new Error(`ERROR LOGGING IN!: ${e}`);
+    }
+  }
+
+  // Logs out the user and sets token to null
+  function logout() {
+    setUser(null);
+    setToken(null);
+  }
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <UserContext.Provider value={{user, token, signup, login, logout}}>
+      <div className="App">
+        <section>
+          <NavBar />
+          <Routes />
+        </section>
+      </div>
+    </UserContext.Provider>
   );
 }
 

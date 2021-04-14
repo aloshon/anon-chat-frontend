@@ -1,0 +1,52 @@
+/* Style all forms and inputs, classes below only style files that have imported it */
+/* input{
+    width: 70%;
+    padding: 12px 20px;
+    margin: 0 auto;
+    margin-top: 20px;
+    margin-bottom: 10px;
+    display: block;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+label {
+    position: relative;
+}
+
+input[type=submit]:hover {
+    background-color: rgb(4, 215, 223);
+}
+
+.container {
+    clear: both;
+}
+
+form {
+    display: inline;
+}
+  
+.container input {
+    clear: both;
+} */
+
+.createform{
+    text-align: left;
+    padding: 5px;
+    margin: 30px;
+}
+
+.createform button{
+    margin: 3px;
+}
+
+.create-chat-header{
+    font-size: 31px;
+    text-align: center;
+    margin: 10px;
+}
+
+button {
+    float: right;
+}
