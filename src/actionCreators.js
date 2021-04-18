@@ -1,5 +1,5 @@
 import axios from "axios";
-import {FETCH_INVITED_CHATS, FETCH_GROUP_CHAT, ADD_GROUP_CHAT, BLOCK_USER, UNBLOCK_USER, DELETE_GROUP_CHAT } from "./actionTypes";
+import {FETCH_INVITED_CHATS, FETCH_GROUP_CHAT, ADD_GROUP_CHAT, BLOCK_USER, UNBLOCK_USER, DELETE_GROUP_CHAT, DELETE_CONTACT, TOGGLE_DARK_MODE } from "./actionTypes";
 const BASE_URL = process.env.REACT_APP_BASE_URL || "http://localhost:3001";
 // This is used for the post request routes that require authorization
 // May need to add isAdmin for requests to work
@@ -128,3 +128,7 @@ function unblockedUser(data){
         payload: data
     }
 }
+
+// For actions that don't require axios and promises.
+export const removeContact = (dispatch, user_id) => dispatch({type: DELETE_CONTACT, payload: user_id});
+export const toggleDarkMode = (dispatch) => dispatch({type: TOGGLE_DARK_MODE})

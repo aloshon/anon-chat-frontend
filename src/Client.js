@@ -10,6 +10,7 @@ import Button from "react-bootstrap/Button";
 import "./Client.css";
 import Message from "./Message";
 import Popup from "./Popup";
+import {useSelector} from "react-redux";
 
 const Client = () => {
     /** get the groupchat from the database using the unique_id,
@@ -24,8 +25,8 @@ const Client = () => {
     const {user} = useContext(UserContext);
     const history = useHistory();
     const lastMessageRef = useRef();
+    const darkMode = useSelector(state => state.darkMode);
     
-
     const ws = new WebSocket(`ws://localhost:3001/chat/${id}`);
 
     const [formData, handleChange, resetFormData] = useFields({
@@ -131,6 +132,7 @@ const Client = () => {
                     return (
                         <div ref={lastMessage ? lastMessageRef : null} 
                         key={index}
+                        style={{backgroundColor: darkMode.card}}
                         className={`${m.user_id === user.id ?
                             'sent' : 'received'}`}>
                             <Message

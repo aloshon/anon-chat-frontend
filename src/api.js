@@ -62,12 +62,6 @@ class AnonChatApi {
         return res
   }
 
-  /** Get guests from specific group chat. */
-//   static async getGuests(data){
-//         let res = await this.request(`guests/${data.unique_id}`, data.group_chat_id, "get");
-//         return res.guests
-//   }
-
   /** Gets a user by username. 
    * When the app is loaded, this
    * function is called to get

@@ -4,7 +4,6 @@ const INITIAL_STATE = [];
 export default function contactReducer (state=INITIAL_STATE, action){
     switch(action.type){
         case FETCH_BLOCK_LIST:
-            console.log(action.payload)
             return [...action.payload]
 
         case BLOCK_USER:
@@ -17,14 +16,12 @@ export default function contactReducer (state=INITIAL_STATE, action){
                     return state
                 }
             }
-            console.log(action.payload)
 
             const newBlockList = [...state, {...action.payload.blocked}]
            
             return newBlockList
 
         case UNBLOCK_USER:
-            console.log(action.payload)
             const blockListCopy = state.filter(s => (
                 s.blocked_username !== action.payload.unblocked.blocked_username
             ));

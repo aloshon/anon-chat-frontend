@@ -1,24 +1,23 @@
-import React, {useContext, useState, useRef} from "react";
+import React, {useContext} from "react";
 import Card from "react-bootstrap/Card";
 import {NavLink} from "react-router-dom";
 import Button from "react-bootstrap/Button";
-import Container from "react-bootstrap/Container";
-import Accordion from "react-bootstrap/Accordion";
-import Collapse from "react-bootstrap/Collapse";
 import UserContext from "./UserContext";
 import "./GroupChatCard.css";
+import {useSelector} from "react-redux";
 
 const GroupChatCard = ({unique_id, title, description, timestamp, creator, displayInvitePage}) => {
     const {user} = useContext(UserContext);
-    
+    const darkMode = useSelector(state => state.darkMode);
     const localTime = new Date(timestamp);
 
     return (
-        <Card className="mt-4 group-chat-card">
+        <Card className="mt-4 group-chat-card" style={{backgroundColor: darkMode.card}}>
             <NavLink exact to={`/chat/${unique_id}`}>
                 <Card.Header 
                 as="h3"
-                className="group-chat-card-header">
+                className="group-chat-card-header"
+                style={{color: darkMode.text}}>
                     {title}
                 </Card.Header>
             </NavLink>

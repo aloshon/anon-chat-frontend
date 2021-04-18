@@ -3,9 +3,11 @@ import Card from "react-bootstrap/Card";
 import Button from "react-bootstrap/Button";
 import AnonChatApi from '../api';
 import "./InviteContact.css";
+import {useSelector} from "react-redux";
 
 const InviteContact = ({unique_id, user_id, group_chat_id, nickname, username, guestList}) => {
     const [invited, setInvited] = useState(false);
+    const darkMode = useSelector(state => state.darkMode);
     
     useEffect(() => {
         if(guestList){
@@ -21,13 +23,17 @@ const InviteContact = ({unique_id, user_id, group_chat_id, nickname, username, g
     const handleInvite = async (evt) => {
         evt.preventDefault();
         try{
-            // response will be boolean
-            const response = await AnonChatApi.inviteGuest({unique_id, user_id, group_chat_id, username});
-            if(response){
-                evt.target.disabled = true;
-                evt.target.innerText = "Invited";
+            if(window.confirm("Invite guest? Cannot be uninvited!")){
+                // response will be boolean
+                const response = await AnonChatApi.inviteGuest({unique_id, user_id, group_chat_id, username});
+                if(response){
+                    evt.target.disabled = true;
+                    evt.target.innerText = "Invited";
+                } else{
+                    alert("Cannot invite guest at this time. Please try again later.")
+                }
             } else{
-                alert("Cannot invite guest at this time. Please try again later.")
+                return
             }
         } catch(e){
             alert(`ERROR INVITING GUEST: ${e}`)
@@ -36,12 +42,13 @@ const InviteContact = ({unique_id, user_id, group_chat_id, nickname, username, g
 
     if(guestList){
         return (
-            <Card className="invite-contact-card">
-                <Card.Header as="h5">{nickname}</Card.Header>
+            <Card className="invite-contact-card"
+                style={{backgroundColor: darkMode.card}}>
                 <Card.Body>
-                    <h5 style={{float: "left"}}>{username}</h5>
-                    {invited ? <Button disabled={true}>Invited</Button> 
-                    : <Button onClick={handleInvite}>Invite!</Button>}
+                    <Card.Title>{nickname}</Card.Title>
+                    <Card.Text>Username: {username}</Card.Text>
+                    {invited ? <Button variant="success" disabled={true}>Invited</Button> 
+                    : <Button variant="success" onClick={handleInvite}>Invite!</Button>}
                 </Card.Body>
             </Card>
         )

@@ -1,18 +1,13 @@
-.contact-card.card {
-    position: relative;
+.blocked-contact-card{
+    margin-bottom: 10px;
     top: 25px;
     margin: 15px;
     text-align: left;
 }
 
-.contact-card.card button {
-    position: relative;
-    bottom: 30px;
-}
-
 @media (min-width: 1000px) {
-    .contact-card.card {
-        display:inline-block;
+    .blocked-contact-card.card {
+        display: inline-block;
         width: 47%;
         padding-bottom: 20px;
         vertical-align: top;

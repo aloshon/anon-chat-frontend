@@ -6,10 +6,12 @@ import useLocalStorage from "./Hooks/useLocalStorage";
 import jwt from "jsonwebtoken";
 import AnonChatApi from "./api";
 import UserContext from "./UserContext";
+import { useSelector } from "react-redux";
 
 function App() {
   const [user, setUser] = useState(null);
   const [token, setToken] = useLocalStorage("token", null);
+  const darkMode = useSelector(state => state.darkMode);
 
   useEffect(function getUserFromToken() {
     async function getUser() {
@@ -66,13 +68,13 @@ function App() {
     setToken(null);
   }
 
+  document.body.style.backgroundColor = darkMode.background;
+
   return (
     <UserContext.Provider value={{user, token, signup, login, logout}}>
-      <div className="App">
-        <section>
+      <div className="App" style={{color: darkMode.text}}>
           <NavBar />
           <Routes />
-        </section>
       </div>
     </UserContext.Provider>
   );

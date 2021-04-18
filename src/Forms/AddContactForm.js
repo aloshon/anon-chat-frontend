@@ -21,20 +21,20 @@ const AddContactForm = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try{
-            console.log(formData);
+            
             let userToAdd = await AnonChatApi.checkForUser(formData.username);
             if(formData.username === user.username) return
             if(!userToAdd){
-                throw `No user with username: ${formData.username}`
+                throw new Error(`No user with username: ${formData.username}`)
             }
             formData.user_id = userToAdd.id;
-            console.log(userToAdd)
+          
             addContact(formData)
             resetFormData();
             return
         } catch(e){
             console.log(`Error adding contact! ${e}`)
-            alert(e);
+            alert(`Error adding contact! ${e}`);
         }
     }
 

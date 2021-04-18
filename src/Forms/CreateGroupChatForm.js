@@ -28,7 +28,7 @@ const CreateGroupChatForm = () => {
             history.push('/');
         } catch(e){
             console.log(`Error creating group chat!:${e}`)
-            alert(e);
+            alert(`Error creating group chat!:${e}`);
         }
     }
 

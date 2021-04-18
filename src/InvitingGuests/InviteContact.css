@@ -1,9 +1,12 @@
 .invite-contact-card{
     margin-bottom: 10px;
+    top: 25px;
+    margin: 15px;
+    text-align: left;
 }
 
-@media (min-width: 900px) {
-    .invite-contact-card {
+@media (min-width: 1000px) {
+    .invite-contact-card.card {
         display:inline-block;
         width: 47%;
         padding-bottom: 20px;

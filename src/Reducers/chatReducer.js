@@ -20,14 +20,6 @@ export default function chatReducer (state=INITIAL_STATE, action){
             delete state[action.payload];
             return {...state}
 
-        case FETCH_MESSAGES:
-            // Find the group chat in the state object.
-            // Search for the room_id in the state's keys
-            const groupChat = state[action.payload.group_chat_id]
-            return {...state, [action.payload.roomId]:
-            {...groupChat, messages: [...groupChat.messages, action.payload.message]}}
-
-
         default:
             return state;
     }
