@@ -11,10 +11,7 @@ export function fetchInvitedGroupChats(user_id){
         try{
             const {data} = await axios.get(
                 `${BASE_URL}/chat/`,
-                {params: {
-                    user_id: user_id
-                },
-                headers: headers});
+                {headers: headers});
             
             dispatch(gotInvitedChats(data));
         } catch(e){

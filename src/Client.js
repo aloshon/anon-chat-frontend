@@ -1,4 +1,3 @@
-// import io from "socket.io-client";
 import React, {useEffect, useState, useContext, useRef} from "react";
 import {useParams, useHistory, Redirect} from "react-router-dom";
 import AnonChatApi from "./api";
@@ -80,7 +79,8 @@ const Client = () => {
             setSendMessage(false);
         }
         async function postMessageToAPI() {
-            const timestamp = new Date().toLocaleTimeString();
+            let currentGMT = new Date();
+            const timestamp = currentGMT.toUTCString();
             // room.id is the PrimaryKey id(a.k.a group_chat_id)
             // while id from params is the unique_id (a.k.a uuid())
             const messsageToSend = {
