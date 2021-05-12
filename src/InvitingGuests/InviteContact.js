@@ -3,20 +3,24 @@ import Card from "react-bootstrap/Card";
 import Button from "react-bootstrap/Button";
 import AnonChatApi from '../api';
 import "./InviteContact.css";
-import {useSelector} from "react-redux";
+import {useSelector, useDispatch} from "react-redux";
+import {invitedGuest} from "../Actions/actionCreators";
 
 const InviteContact = ({unique_id, user_id, group_chat_id, nickname, username, guestList}) => {
     const [invited, setInvited] = useState(false);
     const darkMode = useSelector(state => state.darkMode);
-    
+    const dispatch = useDispatch();
     useEffect(() => {
         if(guestList){
             guestList.forEach(g => {
                 if(g.user_id === user_id){
-                    console.log(g)
                     setInvited(true)
                 } 
             })
+            // only allow 10 users on the list
+            if(guestList.length >= 10){
+                setInvited(true)
+            }
         }
     }, [user_id, guestList]);
 
@@ -24,13 +28,12 @@ const InviteContact = ({unique_id, user_id, group_chat_id, nickname, username, g
         evt.preventDefault();
         try{
             if(window.confirm("Invite guest? Cannot be uninvited!")){
-                // response will be boolean
-                const response = await AnonChatApi.inviteGuest({unique_id, user_id, group_chat_id, username});
-                if(response){
-                    evt.target.disabled = true;
-                    evt.target.innerText = "Invited";
-                } else{
-                    alert("Cannot invite guest at this time. Please try again later.")
+                try{
+                    const res = await AnonChatApi.inviteGuest({unique_id, user_id, group_chat_id, username});
+                    res.unique_id = unique_id;
+                    invitedGuest(dispatch, res);
+                } catch(e){
+                    alert(`Cannot invite guest at this time. Please try again later.  ${e}`)
                 }
             } else{
                 return
@@ -39,7 +42,7 @@ const InviteContact = ({unique_id, user_id, group_chat_id, nickname, username, g
             alert(`ERROR INVITING GUEST: ${e}`)
         }
     }
-
+    
     if(guestList){
         return (
             <Card className="invite-contact-card"
