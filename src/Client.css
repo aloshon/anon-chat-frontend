@@ -36,6 +36,7 @@
     flex: 1;
     max-width: 70%;
     text-align: left;
+    overflow-wrap: break-word;
 }
 
 .received {
@@ -48,4 +49,20 @@
     flex: 1;
     max-width: 70%;
     text-align: left;
+}
+
+.display-guests {
+    display: inline-block;
+    position: fixed;
+    transform: translateX(-50%);
+}
+
+.display-guests button {
+    background-color: rgba(10,40,200,0.5);
+    color: #FFF;
+    border: none;
+}
+
+.display-guests button :focus {
+    background-color: blue;
 }

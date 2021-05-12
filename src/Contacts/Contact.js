@@ -1,7 +1,7 @@
 import Card from "react-bootstrap/Card";
 import Button from "react-bootstrap/Button";
 import {useSelector, useDispatch} from 'react-redux';
-import {removeContact} from '../actionCreators';
+import {removeContact} from '../Actions/actionCreators';
 import "./Contact.css";
 
 const Contact = ({userId, nickname, username}) => {

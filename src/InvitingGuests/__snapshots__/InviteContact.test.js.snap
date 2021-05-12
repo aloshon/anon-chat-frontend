@@ -1,0 +1,3 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`InviteContact should render contact info and whether if user is invited matches snapshot 1`] = `<DocumentFragment />`;

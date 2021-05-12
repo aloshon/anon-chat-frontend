@@ -1,12 +1,12 @@
 import axios from "axios";
-import {FETCH_INVITED_CHATS, FETCH_GROUP_CHAT, ADD_GROUP_CHAT, BLOCK_USER, UNBLOCK_USER, DELETE_GROUP_CHAT, DELETE_CONTACT, TOGGLE_DARK_MODE } from "./actionTypes";
+import {FETCH_INVITED_CHATS, FETCH_GROUP_CHAT, FETCH_BLOCK_LIST, FETCH_GUEST_LIST, ADD_GROUP_CHAT, ADD_CONTACT, BLOCK_USER, UNBLOCK_USER, DELETE_GROUP_CHAT, DELETE_CONTACT, TOGGLE_DARK_MODE, INVITE_GUEST } from "./actionTypes";
 const BASE_URL = process.env.REACT_APP_BASE_URL || "http://localhost:3001";
 // This is used for the post request routes that require authorization
 // May need to add isAdmin for requests to work
 const token = JSON.parse(localStorage.getItem("token"));
 const headers = { Authorization: "Bearer " + token};
 
-export function fetchInvitedGroupChats(user_id){
+export function fetchInvitedGroupChats(){
     return async function(dispatch){
         try{
             const {data} = await axios.get(
@@ -55,9 +55,9 @@ export function addGroupChat(newGroupChat){
     return async function(dispatch){
         try{
             // Convert to unviersal time GMT
-            let currentGMT = new Date();
-            currentGMT.toUTCString();
-            newGroupChat.timestamp = currentGMT;
+            let currentUTC = new Date();
+            currentUTC.toUTCString();
+            newGroupChat.timestamp = currentUTC;
             const {data} = await axios.post(
                 `${BASE_URL}/chat/`,
                 newGroupChat,
@@ -79,6 +79,28 @@ function addedGroupChat(groupChat){
     }
 }
 
+export function deleteGroupChat(unique_id){
+    return async function(dispatch){
+        try{
+            const {data} = await axios.delete(
+                `${BASE_URL}/chat/${unique_id}`,
+                {headers: headers}
+            )
+            dispatch(deletedGroupChat(data.deletedGroupChat));
+        } catch(e){
+            console.log(e);
+            alert(`Error deleting group chat ${e}`);
+        }
+    }
+}
+
+function deletedGroupChat(groupChat){
+    return {
+        type: DELETE_GROUP_CHAT,
+        payload: groupChat
+    }
+}
+
 export function blockUser(userToBlock){
     return async function(dispatch){
         try{
@@ -91,7 +113,7 @@ export function blockUser(userToBlock){
             dispatch(blockedUser(data));
         } catch(e){
             console.log(e);
-            alert(`Error blocking user! Please try again later!`);
+            alert(`Error blocking user! Please try again later! ${e}`);
         }
     }
 }
@@ -114,7 +136,7 @@ export function unblockUser(userToUnblock){
             dispatch(unblockedUser(data));
         } catch(e){
             console.log(e);
-            alert(`Error unblocking user! Please try again later!`);
+            alert(`Error unblocking user! Please try again later! ${e}`);
         }
     }
 }
@@ -127,5 +149,9 @@ function unblockedUser(data){
 }
 
 // For actions that don't require axios and promises.
+export const addContact = (dispatch, data) => dispatch({type: ADD_CONTACT, payload: data});
+export const getBlockList = (dispatch, data) => dispatch({type: FETCH_BLOCK_LIST, payload: data});
+export const getGuestList = (dispatch, data) => dispatch({type: FETCH_GUEST_LIST, payload: data});
 export const removeContact = (dispatch, user_id) => dispatch({type: DELETE_CONTACT, payload: user_id});
-export const toggleDarkMode = (dispatch) => dispatch({type: TOGGLE_DARK_MODE})
+export const toggleDarkMode = (dispatch) => dispatch({type: TOGGLE_DARK_MODE});
+export const invitedGuest = (dispatch, data) => dispatch({type: INVITE_GUEST, payload: data})

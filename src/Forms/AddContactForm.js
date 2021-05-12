@@ -6,13 +6,12 @@ import Container from 'react-bootstrap/Container';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import {useDispatch} from 'react-redux';
-import {ADD_CONTACT} from '../actionTypes';
+import {addContact} from '../Actions/actionCreators';
 import UserContext from "../UserContext";
 
 const AddContactForm = () => {
     const dispatch = useDispatch();
-    const {user} = useContext(UserContext)
-    const addContact = (data) => dispatch({type: ADD_CONTACT, payload: data});
+    const {user} = useContext(UserContext);
     const [formData, handleChange, resetFormData] = useFields({
         username: '',
         nickname: ''
@@ -29,7 +28,7 @@ const AddContactForm = () => {
             }
             formData.user_id = userToAdd.id;
           
-            addContact(formData)
+            addContact(dispatch, formData)
             resetFormData();
             return
         } catch(e){
@@ -47,7 +46,7 @@ const AddContactForm = () => {
                     <Form.Control name="username" type="text" value={formData.username} onChange={handleChange} placeholder="Username" />
                 </Form.Group>
                 <Form.Group>
-                    <Form.Label>Description:</Form.Label>
+                    <Form.Label>Nickname:</Form.Label>
                     <Form.Control name="nickname" type="text" value={formData.nickname} onChange={handleChange} placeholder="Nickname" />
                 </Form.Group>
                 <Button variant="primary" type="submit" size="md" block>

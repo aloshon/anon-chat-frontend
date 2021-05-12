@@ -21,7 +21,7 @@ function App() {
           // insert the token onto the API class
           AnonChatApi.token = token;
           let currentUser = await AnonChatApi.getUser(username);
-          console.log(currentUser)
+          
           setUser(currentUser);
         } catch (e) {
           console.error(e);

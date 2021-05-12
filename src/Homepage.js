@@ -1,8 +1,7 @@
-import React, {useContext, useEffect} from "react";
-import UserContext from "./UserContext";
+import React, {useEffect} from "react";
 import GroupChatCard from "./GroupChatCard";
 import Container from "react-bootstrap/Container";
-import {fetchInvitedGroupChats} from "./actionCreators";
+import {fetchInvitedGroupChats} from "./Actions/actionCreators";
 import {useSelector, useDispatch, shallowEqual} from "react-redux";
 import {useHistory} from "react-router-dom";
 
@@ -13,14 +12,14 @@ import {useHistory} from "react-router-dom";
 * From there user can invite other users to their group chats
 */
 function Homepage(){
-    const {user} = useContext(UserContext);
+    // const {user} = useContext(UserContext);
     const groupChatTitles = useSelector(state => state.titles, shallowEqual);
     const dispatch = useDispatch();
     const history = useHistory();
 
     useEffect(() => {
-        dispatch(fetchInvitedGroupChats(user.id))
-    }, [dispatch, user.id]);
+        dispatch(fetchInvitedGroupChats())
+    }, [dispatch]);
 
     function displayInvitePage(unique_id){
         return history.push(`/invite/${unique_id}`)
@@ -28,7 +27,6 @@ function Homepage(){
 
     if(groupChatTitles.length === 0) return <h1>No chats yet!</h1>;
     
-    if(groupChatTitles){
         return (
             <Container style={{marginBottom: "15px"}}>
                 
@@ -43,11 +41,8 @@ function Homepage(){
                     displayInvitePage={displayInvitePage}
                     />
                 ))}
-            </Container>
-        )
-    }
-
-    return <h1>Loading...</h1>
+            </Container> || <h1>Loading...</h1>
+        ) 
 }
 
 export default Homepage;

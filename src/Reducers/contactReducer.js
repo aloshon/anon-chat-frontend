@@ -1,4 +1,4 @@
-import {ADD_CONTACT, DELETE_CONTACT} from '../actionTypes.js'
+import {ADD_CONTACT, DELETE_CONTACT} from '../Actions/actionTypes.js'
 const INITIAL_STATE = [];
 
 export default function contactReducer (state=INITIAL_STATE, action){

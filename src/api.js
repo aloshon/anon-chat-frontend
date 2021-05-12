@@ -19,7 +19,7 @@ class AnonChatApi {
 
     const url = `${BASE_URL}/${endpoint}`;
     const headers = { Authorization: `Bearer ${AnonChatApi.token}` };
-    console.log(headers)
+    
     const params = (method === "get")
         ? data
         : {};
@@ -37,8 +37,8 @@ class AnonChatApi {
 
   /** Get chat messages from group chat id. */
 
-  static async getChatMessages(id) {
-    let res = await this.request(`message/${id}`);
+  static async getChatMessages(id, offset) {
+    let res = await this.request(`message/${id}`, {offset});
     return res.messages;
   }
 
@@ -58,7 +58,6 @@ class AnonChatApi {
   /** Invite guest to group chat. */
   static async inviteGuest(data){
         let res = await this.request(`guests/${data.unique_id}`, data, "post");
-        
         return res
   }
 
@@ -90,12 +89,11 @@ class AnonChatApi {
         return res.token;
   }
 
-  /** Save user profile page. */
-  static async saveProfile(username, data) {
-       
-        let res = await this.request(`users/${username}`, data, "patch");
-        return res.user;
-  }
+  /** Delete user */
+  static async deleteUser() {
+      let res = await this.request(`users`, {}, "delete");
+      return res;
+}
 }
 
 export default AnonChatApi;

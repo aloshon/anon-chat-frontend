@@ -1,5 +1,5 @@
 import {useSelector, useDispatch} from "react-redux";
-import {unblockUser} from "./actionCreators";
+import {unblockUser} from "./Actions/actionCreators";
 import Card from "react-bootstrap/Card";
 import Button from "react-bootstrap/Button";
 import "./BlockedUser.css";
@@ -11,7 +11,7 @@ const BlockedUser = ({blockedUser}) => {
         <Card className="blocked-contact-card" style={{backgroundColor: darkMode.card}}>
             <Card.Body>
                 <Card.Title>{blockedUser}</Card.Title>
-                <Button 
+                <Button data-testid="unblock"
                 variant="success"
                 onClick={() => dispatch(unblockUser(blockedUser))}>
                     Unblock

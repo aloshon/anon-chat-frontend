@@ -16,6 +16,12 @@ const Client = () => {
      * if no group chat redirect with warning. otherwise 
      * set up web socket replace /test with the group_chat_id
      * 
+     * last message is referenced so when the user sends a message
+     * or just first opens the group chat, they are sent to the bottom
+     * 
+     * top message is refferenced so when the user scrolls up to the top,
+     * it calls the backend for the next 25 messages
+     * 
      * NO REDUX HERE DUE TO RERENDERS
      */
     // id is the unique_id similar to uuid() rather than room.id,
@@ -40,30 +46,28 @@ const Client = () => {
         ws.onopen = async function(evt){
             try {
                 const groupChat = await AnonChatApi.getGroupChat(id);
-                const oldMessages = await AnonChatApi.getChatMessages(id);
+                const oldMessages = await AnonChatApi.getChatMessages(id, messages.length);
 
                 setMessages(oldMessages);
                 setRoom(groupChat);
                 if(lastMessageRef.current){
                     lastMessageRef.current.scrollIntoView({ smooth: true});
                 }
-                console.log("WS CLOSED")
-                return () => ws.close();
             } catch(e){
                 if(e[0] === "Not invited in this group chat!"){
-                    console.log("HERE")
                     alert(e[0]);
                     history.push('/')
                     return <Redirect to='/'/>;
                 }
-                
             }
         }
 
         ws.onmessage = function(evt){
             const user_id = parseInt(evt.data.split("")[0]);
             const message = evt.data.slice(1);
-            const timestamp = new Date().toLocaleTimeString();
+            const currentTime = new Date();
+            const currentUTC = currentTime.toUTCString();
+            const timestamp = new Date(currentUTC);
             setMessages(messages => [...messages, {user_id, message, timestamp}])
         }
 
@@ -79,16 +83,20 @@ const Client = () => {
             setSendMessage(false);
         }
         async function postMessageToAPI() {
-            let currentGMT = new Date();
-            const timestamp = currentGMT.toUTCString();
+            
             // room.id is the PrimaryKey id(a.k.a group_chat_id)
             // while id from params is the unique_id (a.k.a uuid())
             const messsageToSend = {
                 unique_id: id,
                 message: formData.message, 
                 user_id: user.id, 
-                group_chat_id: room.id, 
-                timestamp}
+                group_chat_id: room.id
+            }
+            // Convert to unviersal time UTC and send it to database
+            let currentUTC = new Date();
+            currentUTC.toUTCString();
+            messsageToSend.timestamp = currentUTC;
+
             await AnonChatApi.sendChatMessage(messsageToSend);
             
             // add user_id to the start of the message string
@@ -104,7 +112,15 @@ const Client = () => {
         if(lastMessageRef.current && sendMessage){
             lastMessageRef.current.scrollIntoView()
         }
-    }, [lastMessageRef.current, sendMessage]);
+    }, [sendMessage]);
+    
+
+    window.onscroll = async () => {
+        if(window.pageYOffset === 0) {
+            const oldMessages = await AnonChatApi.getChatMessages(id, messages.length);
+            setMessages((messages) => [...oldMessages, ...messages]);
+        }
+      };
 
     const goBackHome = () => {
         ws.close();
@@ -118,34 +134,43 @@ const Client = () => {
     // shuffle the order of the guest list so no one can
     // figure out who made the list
     room.guests.sort(() => Math.random() - 0.5); 
-
     return (
         <>
             <div className="display-guests">
-            <Button  onClick={() => setShowGuests(true)}>View Guest List</Button>
+            <Button 
+            style={{color: darkMode.text}}
+             onClick={() => setShowGuests(true)}>
+                 View Guest List
+            </Button>
             </div>
             <Container className="messages">
                 {messages.map((m, index) => {
                     // checks the length of messages to see if message is the last
                     // if it is set reference to that message
                     const lastMessage = messages.length - 1 === index;
+                    let timestamp = new Date(m.timestamp).toLocaleTimeString();
+                    
                     return (
                         <div ref={lastMessage ? lastMessageRef : null} 
                         key={index}
-                        style={{backgroundColor: darkMode.card}}
+                        style={{backgroundColor: m.user_id === user.id ? darkMode.card : 'gray'}}
                         className={`${m.user_id === user.id ?
                             'sent' : 'received'}`}>
                             <Message
                                 message={m.message}
-                                timestamp={m.timestamp}>
+                                timestamp={timestamp}>
                             </Message>
                         </div>
                     )
                 })}
                 {showGuests && <Popup
+                    key="popup"
                     content={
-                        room.guests.map(g => (
-                            <div>{g.username}</div>
+                        room.guests.map((g, idx) => (
+                            <div
+                            key={idx}
+                            >{g.username}
+                            </div>
                         ))
                     }
                     handleClose={() => setShowGuests(false)}

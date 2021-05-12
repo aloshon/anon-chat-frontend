@@ -19,6 +19,7 @@
     padding: 15px;
     border: 1px solid #999;
     overflow: auto;
+    color: gray;
 }
    
   .close-icon {

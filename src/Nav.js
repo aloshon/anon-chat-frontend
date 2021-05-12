@@ -37,12 +37,12 @@ const NavBar = () => {
             </>
         );
     }
-
+    
     return (
             <Navbar bg="dark" variant="dark">
                 <Navbar.Brand href="/">anonChat</Navbar.Brand>
                 <Nav className="ml-auto navbar-items">
-                    <NavLink to="/signup">Sign Up</NavLink>
+                    <NavLink data-testid="signup" to="/signup">Sign Up</NavLink>
                     <NavLink to="/login">Log In</NavLink>
                 </Nav>
             </Navbar>

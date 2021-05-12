@@ -1,0 +1,3 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`SignupForm should render form for user to sign up matches snapshot 1`] = `<DocumentFragment />`;

@@ -1,4 +1,4 @@
-import { TOGGLE_DARK_MODE } from '../actionTypes.js'
+import { TOGGLE_DARK_MODE } from '../Actions/actionTypes.js'
 import {LIGHT_MODE, DARK_MODE} from '../styles.js';
 const INITIAL_STATE = {isDarkMode: false, ...LIGHT_MODE};
 

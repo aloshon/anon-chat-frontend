@@ -6,8 +6,8 @@ import LoginForm from "./Forms/LoginForm";
 import UserContext from "./UserContext";
 import Homepage from "./Homepage";
 import CreateGroupChatForm from "./Forms/CreateGroupChatForm";
-import ContactsList from "./Contacts/ContactsList";
-import InvitingGuest from "./InvitingGuests/InvitingGuest";
+import ContactsList from "./Contacts/ContactList";
+import EditGroupChat from "./InvitingGuests/EditGroupChat";
 import Profile from "./Profile";
 
 const Routes = () => {
@@ -34,7 +34,7 @@ const Routes = () => {
                 <ContactsList />
             </Route>
             <Route exact path="/invite/:id">
-                <InvitingGuest />
+                <EditGroupChat />
             </Route>
             <Route exact path="/profile">
                 <Profile />

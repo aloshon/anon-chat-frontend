@@ -8,3 +8,5 @@ export const FETCH_BLOCK_LIST= "FETCH_BLOCK_LIST";
 export const BLOCK_USER = "BLOCK_USER";
 export const UNBLOCK_USER = "UNBLOCK_USER";
 export const TOGGLE_DARK_MODE = "TOGGLE_DARK_MODE";
+export const INVITE_GUEST = "INVITE_GUEST";
+export const FETCH_GUEST_LIST = "FETCH_GUEST_LIST";

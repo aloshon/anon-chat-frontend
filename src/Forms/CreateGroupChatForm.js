@@ -7,7 +7,7 @@ import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import UserContext from '../UserContext';
 import {useDispatch} from 'react-redux';
-import {addGroupChat} from '../actionCreators';
+import {addGroupChat} from '../Actions/actionCreators';
 
 const CreateGroupChatForm = () => {
     const history = useHistory();
@@ -44,11 +44,8 @@ const CreateGroupChatForm = () => {
                     <Form.Label>Description:</Form.Label>
                     <Form.Control name="description" type="text" maxLength="400" value={formData.description} onChange={handleChange} placeholder="Description" />
                 </Form.Group>
-                <Button variant="primary" type="submit">
+                <Button variant="primary" type="submit" size="md" block>
                     Submit
-                </Button>
-                <Button variant="secondary" onClick={() => history.push('/')} >
-                    Back
                 </Button>
             </Form>
         </Container>

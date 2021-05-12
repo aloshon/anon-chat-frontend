@@ -1,4 +1,4 @@
-import React, { useEffect, useContext } from "react";
+import React, { useContext } from "react";
 import useFields from '../Hooks/useFields';
 import "./Forms.css";
 import AnonChatApi from "../api";
@@ -7,7 +7,7 @@ import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import {useDispatch} from 'react-redux';
 import UserContext from "../UserContext";
-import {blockUser} from "../actionCreators";
+import {blockUser} from "../Actions/actionCreators";
 
 const AddUserToBlockListForm = () => {
     const dispatch = useDispatch();
@@ -28,8 +28,8 @@ const AddUserToBlockListForm = () => {
             resetFormData();
             return
         } catch(e){
-            console.log(`Error blocking user! ${e}`)
-            alert(e);
+            console.error(`Error blocking user! ${e}`)
+            alert(`Error blocking user! ${e}`);
         }
     }
     return (

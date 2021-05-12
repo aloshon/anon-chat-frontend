@@ -1,4 +1,4 @@
-import { FETCH_INVITED_CHATS } from "../actionTypes";
+import { FETCH_INVITED_CHATS } from "../Actions/actionTypes";
 
 const INITIAL_STATE = [];
 // list of group chat titles that the user is a guest in

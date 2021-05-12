@@ -1,0 +1,3 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`AddUserToBlockListForm should render form to block user matches snapshot 1`] = `<DocumentFragment />`;
