@@ -14,13 +14,13 @@ import {useSelector} from "react-redux";
 const Client = () => {
     /** get the groupchat from the database using the unique_id,
      * if no group chat redirect with warning. otherwise 
-     * set up web socket replace /test with the group_chat_id
+     * set up web socket
      * 
      * last message is referenced so when the user sends a message
      * or just first opens the group chat, they are sent to the bottom
      * 
-     * top message is refferenced so when the user scrolls up to the top,
-     * it calls the backend for the next 25 messages
+     * top message is referenced so when the user scrolls up to the top,
+     * it calls the backend for the next 25 messages and keeps the same screen
      * 
      * NO REDUX HERE DUE TO RERENDERS
      */
@@ -29,10 +29,14 @@ const Client = () => {
     const {id} = useParams();
     const {user} = useContext(UserContext);
     const history = useHistory();
+    // lastMessageRef will keep track of the bottom message
+    // so whenever the user sends a message or opens the room
+    // they are sent there
+    // topMessageRef will actually track the 2nd to top message before more are loaded.
+    // Just so the user can scroll up once the messages are loaded normally
     const lastMessageRef = useRef();
+    const topMessageRef = useRef();
     const darkMode = useSelector(state => state.darkMode);
-    
-    const ws = new WebSocket(`ws://localhost:3001/chat/${id}`);
 
     const [formData, handleChange, resetFormData] = useFields({
         message: ''
@@ -42,12 +46,28 @@ const Client = () => {
     const [sendMessage, setSendMessage] = useState(false);
     const [showGuests, setShowGuests] = useState(false);
 
+    const [ws, setWs] = useState(null);
+
     useEffect(() => {
-        ws.onopen = async function(evt){
+        if (ws === null) {
+            setWs(new WebSocket(`ws://localhost:3001/chat/${id}`));
+        }
+        return () => {
+            if(ws){
+                console.log("closing ws due to unmount!");
+            
+                ws.close();
+                setWs(null);
+            }
+        }
+    }, [ws, setWs]);
+
+    useEffect(() => {
+        async function getRoomOnRender(){
             try {
                 const groupChat = await AnonChatApi.getGroupChat(id);
                 const oldMessages = await AnonChatApi.getChatMessages(id, messages.length);
-
+    
                 setMessages(oldMessages);
                 setRoom(groupChat);
                 if(lastMessageRef.current){
@@ -61,30 +81,42 @@ const Client = () => {
                 }
             }
         }
+        if(user){
+            getRoomOnRender()
+        }
+    }, [user]);
 
+    useEffect(() => {
+        // wait for ws to be established
+        while(!ws) return;
         ws.onmessage = function(evt){
-            const user_id = parseInt(evt.data.split("")[0]);
-            const message = evt.data.slice(1);
-            const currentTime = new Date();
-            const currentUTC = currentTime.toUTCString();
-            const timestamp = new Date(currentUTC);
-            setMessages(messages => [...messages, {user_id, message, timestamp}])
+            try{
+                const user_id = parseInt(evt.data.split("")[0]);
+                const message = evt.data.slice(1);
+                const currentTime = new Date();
+                const currentUTC = currentTime.toUTCString();
+                const timestamp = new Date(currentUTC);
+                setMessages(messages => [...messages, {user_id, message, timestamp}])
+            } catch(e){
+                console.log(e);
+                alert(`Please try again later or refresh the page! ${e}`);
+            }
         }
 
         ws.onclose = function(evt){
-            console.log("DISCONNECTED!!")
+            console.log("DISCONNECTED!!");
             ws.close();
         }
-    }, [])
+
+        ws.onerror = function(evt){
+            console.log(evt);
+        }
+    }, [ws])
 
     useEffect(() => {
-        if(sendMessage){
-            postMessageToAPI();
-            setSendMessage(false);
-        }
         async function postMessageToAPI() {
             
-            // room.id is the PrimaryKey id(a.k.a group_chat_id)
+            // room.id is the PrimaryKey id of the group chat (a.k.a group_chat_id)
             // while id from params is the unique_id (a.k.a uuid())
             const messsageToSend = {
                 unique_id: id,
@@ -96,40 +128,70 @@ const Client = () => {
             let currentUTC = new Date();
             currentUTC.toUTCString();
             messsageToSend.timestamp = currentUTC;
+            console.log(ws.readyState)
 
             await AnonChatApi.sendChatMessage(messsageToSend);
-            
             // add user_id to the start of the message string
-            ws.send(`${user.id}` + formData.message);
-            resetFormData();
+            const message = `${user.id}` + formData.message;
+            // wait for ws state to be ready to send message
+            ws.send(message); 
+            return
         }
-    }, [sendMessage])
+
+        if(sendMessage){
+
+            postMessageToAPI();
+            resetFormData();
+            // disable the send button for half a second
+            setTimeout(() => {
+                setSendMessage(false)
+            }, 500);
+        }
+    }, [sendMessage, ws])
     
 
     // If the user is not scrolled to the bottom of the page after
     // sending a new message, scroll them into view
     useEffect(() => {
         if(lastMessageRef.current && sendMessage){
-            lastMessageRef.current.scrollIntoView()
+            lastMessageRef.current.scrollIntoView({behavior: "smooth"})
         }
     }, [sendMessage]);
     
+    // wait for message to exist or be loaded before executing this code
+    // Each time user is at top of page, load 25 more messages and wait a bit
+    // If the user exits the page, topMessageRef.current is null 
+    // so do not scrollIntoView
+    useEffect(() => {
+        window.onscroll = async () => {
+            if(window.pageYOffset === 0) {
+                const oldMessages = await AnonChatApi.getChatMessages(id, messages.length);
 
-    window.onscroll = async () => {
-        if(window.pageYOffset === 0) {
-            const oldMessages = await AnonChatApi.getChatMessages(id, messages.length);
-            setMessages((messages) => [...oldMessages, ...messages]);
-        }
-      };
+                setTimeout(() => {
+                    if(oldMessages.length > 0){
+                        setMessages((messages) => [...oldMessages, ...messages]);
+                        if(topMessageRef.current){
+                            topMessageRef.current.scrollIntoView();
+                        }
+                    }
+                }, 1300);
+            }
+        };
+        return () => {}
+    }, [messages]);
+
 
     const goBackHome = () => {
         ws.close();
-        history.push('/');
+        history.push("/");
     }
 
     if(!room){
         return <h1>Loading...</h1>
     }
+
+    // If user is not logged in or loaded yet, return loading
+    while(!user) return <h1>Loading...</h1>;
 
     // shuffle the order of the guest list so no one can
     // figure out who made the list
@@ -145,13 +207,17 @@ const Client = () => {
             </div>
             <Container className="messages">
                 {messages.map((m, index) => {
-                    // checks the length of messages to see if message is the last
-                    // if it is set reference to that message
+                    // checks the length of messages to see if message is at end of list
+                    // Reference that to scroll to bottom
                     const lastMessage = messages.length - 1 === index;
                     let timestamp = new Date(m.timestamp).toLocaleTimeString();
+                    // After new messages, if the list is not divisible by 25,
+                    // adjust topMessageRef.
+                    // So the user stays on the same message after more are loaded on top
+                    const topMessageOffset = messages.length % 25 !== 0 ? (messages.length % 25 - 1) : 24;
                     
                     return (
-                        <div ref={lastMessage ? lastMessageRef : null} 
+                        <div ref={lastMessage ? lastMessageRef : index === topMessageOffset ? topMessageRef : null} 
                         key={index}
                         style={{backgroundColor: m.user_id === user.id ? darkMode.card : 'gray'}}
                         className={`${m.user_id === user.id ?
@@ -192,10 +258,17 @@ const Client = () => {
                     value={formData.message}
                     onChange={handleChange}
                     />
+                    {sendMessage ? 
+                    <Button
+                    type="submit"
+                    disabled={true}
+                    >send
+                    </Button> :
                     <Button
                     type="submit"
                     >send
-                    </Button>
+                    </Button>}
+                    
                 </Form>
             </div>
         </>
