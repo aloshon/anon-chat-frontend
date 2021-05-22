@@ -5,13 +5,18 @@ import AnonChatApi from "../api";
 import Container from 'react-bootstrap/Container';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
-import {useDispatch} from 'react-redux';
+import {useDispatch, useSelector, shallowEqual} from 'react-redux';
 import {addContact} from '../Actions/actionCreators';
 import UserContext from "../UserContext";
 
+/**
+ * AddContactForm component renders form for adding contact
+ * to the user's contact list
+ */
 const AddContactForm = () => {
     const dispatch = useDispatch();
     const {user} = useContext(UserContext);
+    const contacts = useSelector(state => state.contacts, shallowEqual);
     const [formData, handleChange, resetFormData] = useFields({
         username: '',
         nickname: ''
@@ -26,9 +31,21 @@ const AddContactForm = () => {
             if(!userToAdd){
                 throw new Error(`No user with username: ${formData.username}`)
             }
+            // Check contact list for duplicate username
+            // if there is then do not do anything
+            let duplicate = false;
+            contacts.forEach((c) => {
+                if(c.username === formData.username){
+                    duplicate = true;
+                    return
+                }
+                return
+            });
+            if(duplicate) return;
             formData.user_id = userToAdd.id;
+            formData.owner_id = user.id;
           
-            addContact(dispatch, formData)
+            dispatch(addContact(formData))
             resetFormData();
             return
         } catch(e){
