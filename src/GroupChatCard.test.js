@@ -10,7 +10,6 @@ describe("GroupChatCard should render basic group chat info", () => {
     const user = {
         id: 1,
         username: "user1",
-        isAdmin: false,
         blockList: []
     }
 

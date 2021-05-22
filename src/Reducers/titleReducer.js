@@ -5,6 +5,7 @@ const INITIAL_STATE = [];
 export default function titleReducer(state=INITIAL_STATE, action){
     switch (action.type) {
         case FETCH_INVITED_CHATS:
+          // Fetch the list of group chats the user is invited in
           return [...action.payload.groupChats];
 
         default:

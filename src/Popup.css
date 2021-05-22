@@ -5,6 +5,7 @@
     height: 100vh;
     top: 0;
     left: 0;
+    margin-top: 10px;
 }
    
   .box {
@@ -35,4 +36,5 @@
     text-align: center;
     border: 1px solid grey;
     font-size: 20px;
+    margin-top: 10px;
 }

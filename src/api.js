@@ -4,19 +4,16 @@ const BASE_URL = process.env.REACT_APP_BASE_URL || "http://localhost:3001";
 
 /** API Class.
  *
- * Static class tying together methods used to get/send to to the API.
- * There shouldn't be any frontend-specific stuff here, and there shouldn't
- * be any API-aware stuff elsewhere in the frontend.
+ * Static class tying together methods used to get/send to the API
+ * that is not already covered by the action creators.
  *
  */
 
 class AnonChatApi {
-  // the token for interactive with the API will be stored here.
+  // the token for interacting with the API will be stored here.
   static token;
 
   static async request(endpoint, data = {}, method = "get") {
-    // console.debug("API Call:", endpoint, data, method);
-
     const url = `${BASE_URL}/${endpoint}`;
     const headers = { Authorization: `Bearer ${AnonChatApi.token}` };
     
@@ -55,12 +52,6 @@ class AnonChatApi {
         return res.groupChat;
   }
 
-  /** Invite guest to group chat. */
-  static async inviteGuest(data){
-        let res = await this.request(`guests/${data.unique_id}`, data, "post");
-        return res
-  }
-
   /** Gets a user by username. 
    * When the app is loaded, this
    * function is called to get
@@ -93,7 +84,7 @@ class AnonChatApi {
   static async deleteUser() {
       let res = await this.request(`users`, {}, "delete");
       return res;
-}
+  }
 }
 
 export default AnonChatApi;

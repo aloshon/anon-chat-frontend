@@ -9,6 +9,10 @@ import UserContext from '../UserContext';
 import {useDispatch} from 'react-redux';
 import {addGroupChat} from '../Actions/actionCreators';
 
+/**
+ * CreateGroupChatForm component renders form for creating group chats
+ * Returns loading until user data is loaded
+ */
 const CreateGroupChatForm = () => {
     const history = useHistory();
     const dispatch = useDispatch();
@@ -31,6 +35,9 @@ const CreateGroupChatForm = () => {
             alert(`Error creating group chat!:${e}`);
         }
     }
+
+    // If user is not logged in or loaded yet, return loading
+    while(!user) return <h1>Loading...</h1>;
 
     return (
         <Container className="createform">

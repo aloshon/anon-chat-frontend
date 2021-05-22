@@ -16,18 +16,18 @@ describe("contactReducer", () => {
     });
 
     it("should add contact", () => {
-        const newContact = {
+        const addedContact = {
             user_id: 1,
             username: "user1",
             nickname: "test1"
         };
 
-        state.contacts.push(newContact);
+        state.contacts.push(addedContact);
 
         expect(
             rootReducer({contacts: []}, {
                 type: types.ADD_CONTACT,
-                payload: newContact
+                payload: {addedContact: addedContact}
             })
         ).toEqual(state);
     });

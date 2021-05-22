@@ -1,5 +1,6 @@
 import { render, screen } from '@testing-library/react';
 import ContactList from './ContactList';
+import Contact from './Contact';
 import { Provider } from "react-redux";
 import { store } from "../store"
 import {BrowserRouter} from 'react-router-dom';
@@ -9,15 +10,21 @@ describe("Renders list of contacts", () => {
     const user = {
         id: 1,
         username: "user1",
-        isAdmin: false,
-        blockList: []
+        blockList: [],
+        contactList: [
+            {
+                username: "testusername",
+                nickname: "testnickname",
+                user_id: 1
+            }
+        ]
     }
 
     const {asFragment} = render(
       <Provider store={store}>
         <BrowserRouter>
             <UserContext.Provider value={{user}}>
-                <ContactList />
+                <ContactList/>
             </UserContext.Provider>
         </BrowserRouter>
       </Provider>

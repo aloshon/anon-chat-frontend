@@ -10,7 +10,6 @@ describe("CreateGroupChatForm should render form for user to create group chats"
     const user = {
         id: 1,
         username: "user1",
-        isAdmin: false,
         blockList: []
     }
 

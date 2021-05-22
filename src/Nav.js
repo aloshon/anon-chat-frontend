@@ -6,8 +6,10 @@ import { useSelector } from "react-redux";
 import Nav from 'react-bootstrap/Nav';
 import UserContext from "./UserContext";
 
-// NavBar capitolization is crucial since Navbar and Nav are taken by Bootstrap
-/** Grab user and logout function from UserContext,
+// NavBar capitolization is crucial since Navbar and Nav are taken by Bootstrap **
+/** 
+ * NavBar renders different navbars depending if user is logged in or not
+ * Grab user and logout function from UserContext,
  *  if user exists, return logged in navbar.
  *  If not then give navbar with sign up or log in
  */
@@ -18,7 +20,7 @@ const NavBar = () => {
     if(user){
         return (
             <>
-                <Navbar collapseOnSelect expand="md" bg={darkMode.nav} variant={darkMode.nav}>
+                <Navbar fixed="top" collapseOnSelect expand="md" bg={darkMode.nav} variant={darkMode.nav}>
                     <Navbar.Brand href="/" className="m-auto navbar-brand"><h2>anonChat</h2></Navbar.Brand>
                     <Navbar.Toggle aria-controls="responsive-navbar-nav" />
                     <Navbar.Collapse id="responsive-navbar-nav">

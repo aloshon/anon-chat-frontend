@@ -6,12 +6,10 @@ import UserContext from "../UserContext";
 import "./EditGroupChat.css";
 import Container from "react-bootstrap/Container";
 import Button from "react-bootstrap/Button";
-import {fetchGroupChat, deleteGroupChat} from "../Actions/actionCreators";
+import {fetchGroupChat, deleteGroupChat, getContactList} from "../Actions/actionCreators";
 /* EditGroupChat renders list of contacts and depending on if the user
     is on the guest list, the button will display Invite! or Invited.
-    It does not Redux and useState because the guest list is 
-    is not supposed to be constantly changing. Only 10 guests are
-    allowed and they cannot be uninvited.
+  User can also delete the group chats they created if they choose so
 */ 
 const EditGroupChat = () => {
     const {id} = useParams();
@@ -50,6 +48,13 @@ const EditGroupChat = () => {
   }
 
     const contacts = useSelector(state => state.contacts, shallowEqual);
+
+    // Get the user's contactList on render after user is defined
+    useEffect(() =>{
+      if(user){
+          getContactList(dispatch, user.contactList);
+      }
+  }, [user, dispatch]);
     // wait for user and groupChat data to be loaded before attempting to run 
     // the rest of the code
     if(!groupChat || groupChat.guests === undefined || !user){
@@ -63,6 +68,9 @@ const EditGroupChat = () => {
 
     const {guests} = groupChat;
 
+    // If user is not logged in or loaded yet, return loading
+    while(!user) return <h1>Loading...</h1>;
+
     // The Contact component should have an invite button
     // disabled and text invited for those contacts already on guest list
     return (
@@ -70,13 +78,13 @@ const EditGroupChat = () => {
       <h1 className="my-3 inviting-title">Invite Guests to:<br/>{groupChat.title}</h1>
       <Container style={{marginBottom: "45px"}}>
       <Button variant="secondary" size="sm"
-      style={{ float: "left" }}
-      onClick={() => history.push('/')}>
-        Back
+        style={{ float: "left" }}
+        onClick={() => history.push('/')}>
+          Back
       </Button>
-      <p
-      style={{ float: "right" }}
-      >{guests.length}/10</p>
+      <p style={{ float: "right" }}>
+          {guests.length}/10
+      </p>
       </Container>
       <br/>
       {contacts.length !== 0

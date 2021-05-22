@@ -55,6 +55,7 @@ function App() {
     try {
       let token = await AnonChatApi.getLogin(data);
       setToken(token);
+      localStorage.setItem("token", token);
       return true;
     } catch (e) {
       console.error(`Error Logging In: ${e}`);

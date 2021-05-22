@@ -7,6 +7,9 @@ import Container from 'react-bootstrap/Container';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 
+/**
+ * SignupForm component renders form for users to sign up
+ */
 const SignupForm = () => {
     const history = useHistory();
     const {signup} = useContext(UserContext);

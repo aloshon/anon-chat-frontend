@@ -11,7 +11,6 @@ describe("LoginForm should render form for user to log in", () => {
         const user = {
             id: 1,
             username: "user1",
-            isAdmin: false,
             blockList: []
         }
         return user

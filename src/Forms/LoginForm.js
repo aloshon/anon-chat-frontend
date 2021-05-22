@@ -7,6 +7,9 @@ import Container from 'react-bootstrap/Container';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 
+/**
+ * LoginForm component renders form for users to log in
+ */
 const LoginForm = () => {
     const history = useHistory();
     const {login} = useContext(UserContext);

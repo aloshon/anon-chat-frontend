@@ -10,7 +10,6 @@ describe("Nav should render logged in version", () => {
     const user = {
         id: 1,
         username: "user1",
-        isAdmin: false,
         blockList: []
     }
 

@@ -1,10 +1,15 @@
 import Card from "react-bootstrap/Card";
 import Button from "react-bootstrap/Button";
 import {useSelector, useDispatch} from 'react-redux';
-import {removeContact} from '../Actions/actionCreators';
+import {deleteContact} from '../Actions/actionCreators';
 import "./Contact.css";
 
-const Contact = ({userId, nickname, username}) => {
+/**
+ * Contact component displays username and nickname 
+ * while providing user_id for other actions 
+ * like inviting to group chat
+ */
+const Contact = ({user_id, nickname, username}) => {
     const darkMode = useSelector(state => state.darkMode);
     const dispatch = useDispatch();
 
@@ -13,7 +18,7 @@ const Contact = ({userId, nickname, username}) => {
             <Card.Body>
                 <Card.Title>{nickname}</Card.Title>
                 <small><Card.Text>Username: {username}</Card.Text></small>
-                <Button variant="danger" onClick={() => removeContact(dispatch, userId)}>X</Button>
+                <Button variant="danger" onClick={() => dispatch(deleteContact(user_id))}>X</Button>
             </Card.Body>
         </Card>
     )

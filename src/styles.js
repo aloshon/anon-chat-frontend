@@ -1,3 +1,6 @@
+/**
+ * Different colors specified for light and dark mode respectively
+ */
 const colors = {
     darkModeBG: '#3d3d3d',
     lightModeBG: '#EEEEEE',

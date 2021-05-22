@@ -2,7 +2,7 @@ import React, {useEffect} from "react";
 import GroupChatCard from "./GroupChatCard";
 import Container from "react-bootstrap/Container";
 import {fetchInvitedGroupChats} from "./Actions/actionCreators";
-import {useSelector, useDispatch, shallowEqual} from "react-redux";
+import {useSelector, useDispatch} from "react-redux";
 import {useHistory} from "react-router-dom";
 
 
@@ -12,13 +12,12 @@ import {useHistory} from "react-router-dom";
 * From there user can invite other users to their group chats
 */
 function Homepage(){
-    // const {user} = useContext(UserContext);
-    const groupChatTitles = useSelector(state => state.titles, shallowEqual);
+    const groupChatTitles = useSelector(state => state.titles);
     const dispatch = useDispatch();
     const history = useHistory();
 
     useEffect(() => {
-        dispatch(fetchInvitedGroupChats())
+        dispatch(fetchInvitedGroupChats());
     }, [dispatch]);
 
     function displayInvitePage(unique_id){

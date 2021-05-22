@@ -10,7 +10,6 @@ describe("Profile should render username and block list", () => {
     const user = {
         id: 1,
         username: "user1",
-        isAdmin: false,
         blockList: [{
             id: 1,
             blocked_username: "test"

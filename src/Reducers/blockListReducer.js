@@ -4,6 +4,7 @@ const INITIAL_STATE = [];
 export default function blockListReducer (state=INITIAL_STATE, action){
     switch(action.type){
         case FETCH_BLOCK_LIST:
+            // fetch the block list from user
             return [...action.payload]
 
         case BLOCK_USER:
@@ -18,8 +19,9 @@ export default function blockListReducer (state=INITIAL_STATE, action){
             const newBlockList = [...state, {...action.payload.blocked}]
            
             return newBlockList
-
+        
         case UNBLOCK_USER:
+            // filter out the blocked user by username
             const blockListCopy = state.filter(s => (
                 s.blocked_username !== action.payload.unblocked.blocked_username
             ));

@@ -10,7 +10,6 @@ describe("homepage should render", () => {
     const user = {
         id: 1,
         username: "user1",
-        isAdmin: false,
         blockList: []
     }
 

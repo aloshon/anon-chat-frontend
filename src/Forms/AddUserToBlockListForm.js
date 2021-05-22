@@ -9,6 +9,10 @@ import {useDispatch} from 'react-redux';
 import UserContext from "../UserContext";
 import {blockUser} from "../Actions/actionCreators";
 
+/**
+ * AddUserToBlockListForm component renders form for blocking users
+ * by username
+ */
 const AddUserToBlockListForm = () => {
     const dispatch = useDispatch();
     const {user} = useContext(UserContext)
@@ -24,7 +28,7 @@ const AddUserToBlockListForm = () => {
             if(!userToBlock){
                 throw `No user with username: ${formData.username}`
             }
-            dispatch(blockUser(formData.username))
+            dispatch(blockUser(formData.username));
             resetFormData();
             return
         } catch(e){

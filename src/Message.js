@@ -1,3 +1,6 @@
+/**
+ * Message renders message text and small timestamp
+ */
 const Message = ({message, timestamp}) => {
     return (
         <div>

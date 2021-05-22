@@ -10,7 +10,6 @@ describe("AddContactForm should render form for user to add contacts", () => {
     const user = {
         id: 1,
         username: "user1",
-        isAdmin: false,
         blockList: []
     }
 

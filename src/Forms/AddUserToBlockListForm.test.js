@@ -10,7 +10,6 @@ describe("AddUserToBlockListForm should render form to block user", () => {
     const user = {
         id: 1,
         username: "user1",
-        isAdmin: false,
         blockList: []
     }
 

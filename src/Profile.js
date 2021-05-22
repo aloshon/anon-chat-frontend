@@ -10,6 +10,12 @@ import AnonChatApi from "./api";
 import {useHistory} from "react-router-dom";
 import {getBlockList} from './Actions/actionCreators';
 
+/**
+ * Profile renders component that displays user's username
+ * and list of blocked users
+ * User can toggle between dark and light mode
+ * and delete their accounts here.
+ */
 const Profile = () => {
     const {user, logout} = useContext(UserContext);
     const dispatch = useDispatch();
@@ -19,10 +25,10 @@ const Profile = () => {
    
     // Get the user's blockList on render after user is defined
     useEffect(() =>{
-        if(user){
+        if(user && blockList.length === 0){
             getBlockList(dispatch, user.blockList);
         }
-    }, [user, dispatch]);
+    }, [user, dispatch, blockList]);
 
     const handleDelete = () => {
         if(window.confirm("Delete your profile?")){
@@ -34,6 +40,7 @@ const Profile = () => {
         }
     }
 
+    // If user is not logged in or loaded yet, return loading
     while(!user) return <h1>Loading...</h1>;
 
     return(

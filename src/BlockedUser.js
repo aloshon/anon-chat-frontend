@@ -4,6 +4,9 @@ import Card from "react-bootstrap/Card";
 import Button from "react-bootstrap/Button";
 import "./BlockedUser.css";
 
+/** 
+ * BlockedUser renders the username of those who are on the block list
+ */
 const BlockedUser = ({blockedUser}) => {
     const dispatch = useDispatch();
     const darkMode = useSelector(state => state.darkMode);

@@ -1,11 +1,15 @@
 import { useState, useEffect } from "react";
 import Card from "react-bootstrap/Card";
 import Button from "react-bootstrap/Button";
-import AnonChatApi from '../api';
 import "./InviteContact.css";
 import {useSelector, useDispatch} from "react-redux";
-import {invitedGuest} from "../Actions/actionCreators";
+import {inviteGuest} from "../Actions/actionCreators";
 
+/**
+ * InviteContact displays nickname and username 
+ * Also holds data to invite contact to guest list
+ * User can click on button to invite guest but they cannot be uninvited
+ */
 const InviteContact = ({unique_id, user_id, group_chat_id, nickname, username, guestList}) => {
     const [invited, setInvited] = useState(false);
     const darkMode = useSelector(state => state.darkMode);
@@ -29,9 +33,7 @@ const InviteContact = ({unique_id, user_id, group_chat_id, nickname, username, g
         try{
             if(window.confirm("Invite guest? Cannot be uninvited!")){
                 try{
-                    const res = await AnonChatApi.inviteGuest({unique_id, user_id, group_chat_id, username});
-                    res.unique_id = unique_id;
-                    invitedGuest(dispatch, res);
+                    dispatch(inviteGuest({unique_id, user_id, group_chat_id, username}));
                 } catch(e){
                     alert(`Cannot invite guest at this time. Please try again later.  ${e}`)
                 }

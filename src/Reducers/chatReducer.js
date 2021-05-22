@@ -5,7 +5,6 @@ export default function chatReducer (state=INITIAL_STATE, action){
     switch(action.type){
         case FETCH_GROUP_CHAT:
             // Fetch the group chat and return it
-            // This is specifically for the EditingGroupChat component
             
             return { ...state, [action.payload.unique_id]: action.payload };
 
@@ -27,6 +26,7 @@ export default function chatReducer (state=INITIAL_STATE, action){
             return {...state, [unique_id]: {...groupChat, guests: [...groupChat.guests, action.payload]}};
 
         case DELETE_GROUP_CHAT:
+            // Remove group chat from state
             if(!state[action.payload]) return state;
             delete state[action.payload];
             return {...state}

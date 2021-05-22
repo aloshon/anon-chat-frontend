@@ -1,8 +1,12 @@
-import {ADD_CONTACT, DELETE_CONTACT} from '../Actions/actionTypes.js'
+import {ADD_CONTACT, DELETE_CONTACT, FETCH_CONTACT_LIST} from '../Actions/actionTypes.js'
 const INITIAL_STATE = [];
 
 export default function contactReducer (state=INITIAL_STATE, action){
     switch(action.type){
+        case FETCH_CONTACT_LIST:
+            // Fetch the contact list from user
+            return [...action.payload]
+
         case ADD_CONTACT:
             // With state as an array of objects, add contact's user_id
             // a nickname that the user can choose, and the contact's username
@@ -15,21 +19,20 @@ export default function contactReducer (state=INITIAL_STATE, action){
             }
 
             const newContactsCopy = [...state, {
-                user_id: action.payload.user_id, 
-                nickname: action.payload.nickname,
-                username: action.payload.username
+                user_id: action.payload.addedContact.user_id, 
+                nickname: action.payload.addedContact.nickname,
+                username: action.payload.addedContact.username
             }]
            
             return [...newContactsCopy]
 
         case DELETE_CONTACT:
+            // Filter out the contact by user_id
             const contactsCopy = state.filter(s => (
-                s.user_id !== action.payload
-            ))
+                s.user_id !== action.payload.deletedContact.user_id
+            ));
+            
             return [...contactsCopy]
-
-        // case "INVITE_GUEST":
-        //     state.contacts[action.payload.user]
 
         default:
             return state;

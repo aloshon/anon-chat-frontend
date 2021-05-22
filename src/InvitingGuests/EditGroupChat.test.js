@@ -10,8 +10,14 @@ describe("EditGroupChat should render list of contacts for user to invite", () =
     const user = {
         id: 1,
         username: "user1",
-        isAdmin: false,
-        blockList: []
+        blockList: [],
+        contactList: [
+          {
+              username: "testusername",
+              nickname: "testnickname",
+              user_id: 1
+          }
+      ]
     }
 
     const {asFragment} = render(

@@ -10,6 +10,11 @@ import ContactsList from "./Contacts/ContactList";
 import EditGroupChat from "./InvitingGuests/EditGroupChat";
 import Profile from "./Profile";
 
+/**
+ * Routes renders all the routes the user can access
+ * If the user is not logged in, homepage will be replaced
+ * by the log in form
+ */
 const Routes = () => {
     const {user} = useContext(UserContext);
 

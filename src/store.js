@@ -7,10 +7,10 @@ import thunk from "redux-thunk";
 import rootReducer from "./Reducers/rootReducer";
 import { createStore, applyMiddleware } from "redux";
 
-// only keep the contacts and darkMode reducers persistent in local storage
+// only keep the darkMode reducer persistent in local storage
 const persistConfig = {
   key: "root",
-  whitelist:['contacts', 'darkMode'],
+  whitelist:['darkMode'],
   storage,
   stateReconciler: autoMergeLevel2
 };

@@ -11,7 +11,6 @@ describe("SignupForm should render form for user to sign up", () => {
         const user = {
             id: 1,
             username: "user1",
-            isAdmin: false,
             blockList: []
         }
         return user
