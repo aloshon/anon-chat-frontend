@@ -32,7 +32,7 @@ const SignupForm = () => {
     }
 
     return (
-        <Container className="postform">
+        <Container className="postform" style={{marginTop: "20px"}}>
             <h1>Sign Up</h1>
             <Form onSubmit={handleSubmit}>
                 <Form.Group>

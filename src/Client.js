@@ -50,7 +50,8 @@ const Client = () => {
 
     useEffect(() => {
         if (ws === null) {
-            setWs(new WebSocket(`ws://localhost:3001/chat/${id}`));
+            // setWs(new WebSocket(`ws://localhost:3001/chat/${id}`)); <- for development
+            setWs(new WebSocket(`ws://anonchat.surge.sh/chat/${id}`));
         }
         return () => {
             if(ws){

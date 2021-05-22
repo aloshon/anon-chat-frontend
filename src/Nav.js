@@ -41,7 +41,7 @@ const NavBar = () => {
     }
     
     return (
-            <Navbar bg="dark" variant="dark">
+            <Navbar fixed="top" bg="dark" variant="dark">
                 <Navbar.Brand href="/">anonChat</Navbar.Brand>
                 <Nav className="ml-auto navbar-items">
                     <NavLink data-testid="signup" to="/signup">Sign Up</NavLink>

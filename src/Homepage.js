@@ -36,7 +36,7 @@ function Homepage(){
                     title={gc.title}
                     description={gc.description}
                     timestamp={gc.timestamp}
-                    creator={gc.creator_id}
+                    creator_id={gc.creator_id}
                     displayInvitePage={displayInvitePage}
                     />
                 ))}
