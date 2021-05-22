@@ -1,5 +1,3 @@
-let localStorage = {};
-
 const mockData = {
     fetchInvitedGroupChatsResponse: {
         status: 200,
@@ -68,6 +66,26 @@ const mockData = {
             id: 1,
             username: "user2"
         }
+    },
+    addContactResponse: {
+        status: 200,
+        addedContact: {
+            username: "testusername",
+            nickname: "testnickname",
+            user_id: 1
+        }
+    },
+    deleteContactResponse: {
+        status: 200,
+        deletedContact: {
+            user_id: 1
+        }
+    },
+    inviteGuestResponse: {
+        unique_id: "fbbf1b1r-5bf4-4082-ba21-f168be11c85a",
+        username: "user2",
+        group_chat_id: 1,
+        user_id: 2
     }
 }
 

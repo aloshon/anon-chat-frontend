@@ -190,30 +190,97 @@ describe("async actions", () => {
             expect(store.getActions()).toEqual(expectedAction);
         });
     });
+
+
+    test("addContact", async () => {
+        const {addContactResponse} = mockData;
+        moxios.stubRequest(`${BASE_URL}/contact/`, {
+            status: 200,
+            response: addContactResponse
+        });
+        const expectedAction = [{
+            type: types.ADD_CONTACT,
+            payload: {
+                addedContact: {
+                    username: "testusername",
+                    nickname: "testnickname",
+                    user_id: 1
+                },
+                status: 200
+            }
+        }]
+
+        const store = mockStore([]);
+
+        const newContact = {
+            username: "testusername",
+            nickname: "testnickname",
+            owner_id: 2,
+            user_id: 1
+        }
+
+        await store.dispatch(actions.addContact(newContact)).then(() => {
+            expect(store.getActions()).toEqual(expectedAction);
+        });
+    });
+
+    test("deleteContact", async () => {
+        const {deleteContactResponse} = mockData;
+        moxios.stubRequest(`${BASE_URL}/contact/1`, {
+            status: 200,
+            response: deleteContactResponse
+        });
+        const expectedAction = [{
+            type: types.DELETE_CONTACT,
+            payload: {
+                deletedContact: {
+                    user_id: 1
+                },
+                status: 200
+            }
+        }]
+
+        const store = mockStore([]);
+        const contact_id = 1
+
+        await store.dispatch(actions.deleteContact(contact_id)).then(() => {
+            expect(store.getActions()).toEqual(expectedAction);
+        });
+    });
+
+    test("inviteGuest", async () => {
+        const {inviteGuestResponse} = mockData;
+        moxios.stubRequest(`${BASE_URL}/guests/fbbf1b1r-5bf4-4082-ba21-f168be11c85a`, {
+            status: 200,
+            response: inviteGuestResponse
+        });
+        const expectedAction = [{
+            type: types.INVITE_GUEST,
+            payload: {
+                user_id: 2,
+                username: "user2",
+                group_chat_id: 1,
+                unique_id: "fbbf1b1r-5bf4-4082-ba21-f168be11c85a"
+            }
+        }];
+
+        const guest = {
+            user_id: 1,
+            username: "user2",
+            group_chat_id: 1,
+            unique_id: "fbbf1b1r-5bf4-4082-ba21-f168be11c85a"
+        }
+
+        const store = mockStore({});
+
+        await store.dispatch(actions.inviteGuest(guest)).then(() => {
+            expect(store.getActions()).toEqual(expectedAction);
+        });
+    });
 });
 
 
 describe("non-async actions", () => {
-    test("addContact", () => {
-        const expectedAction = {
-            type: types.ADD_CONTACT,
-            payload: {
-                user_id: 1,
-                username: "user1",
-                nickname: "test1"
-            }
-        };
-
-        const contact = {
-            user_id: 1,
-            username: "user1",
-            nickname: "test1"
-        };
-
-        const store = mockStore([]);
-
-        expect(actions.addContact(store.dispatch, contact)).toEqual(expectedAction);
-    });
 
     test("getBlockList", () => {
         const expectedAction = {
@@ -226,23 +293,6 @@ describe("non-async actions", () => {
         expect(actions.getBlockList(store.dispatch, [])).toEqual(expectedAction);
     });
 
-    test("removeContact", () => {
-        const expectedAction = {
-            type: types.DELETE_CONTACT,
-            payload: {
-                user_id: 1
-            }
-        };
-
-        const contact = {
-            user_id: 1
-        };
-
-        const store = mockStore([]);
-
-        expect(actions.removeContact(store.dispatch, contact)).toEqual(expectedAction);
-    });
-
     test("toggleDarkMode", () => {
         const expectedAction = {
             type: types.TOGGLE_DARK_MODE
@@ -251,28 +301,5 @@ describe("non-async actions", () => {
         const store = mockStore({});
 
         expect(actions.toggleDarkMode(store.dispatch)).toEqual(expectedAction);
-    });
-
-    test("invitedGuest", () => {
-        const expectedAction = {
-            type: types.INVITE_GUEST,
-            payload: {
-                user_id: 2,
-                username: "user2",
-                group_chat_id: 1,
-                unique_id: "fbbf1b1r-5bf4-4082-ba21-f168be11c85a"
-            }
-        };
-
-        const guest = {
-            user_id: 2,
-            username: "user2",
-            group_chat_id: 1,
-            unique_id: "fbbf1b1r-5bf4-4082-ba21-f168be11c85a"
-        }
-
-        const store = mockStore({});
-
-        expect(actions.invitedGuest(store.dispatch, guest)).toEqual(expectedAction);
     });
 });
