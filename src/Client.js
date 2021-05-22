@@ -50,8 +50,9 @@ const Client = () => {
 
     useEffect(() => {
         if (ws === null) {
-            // setWs(new WebSocket(`ws://localhost:3001/chat/${id}`)); <- for development
-            setWs(new WebSocket(`ws://anonchat.surge.sh/chat/${id}`));
+            /** The localhost url is only for development */
+            // setWs(new WebSocket(`ws://localhost:3001/chat/${id}`)); 
+            setWs(new WebSocket(`wss://anon-chat-backend.herokuapp.com/chat/${id}`));
         }
         return () => {
             if(ws){
@@ -129,7 +130,6 @@ const Client = () => {
             let currentUTC = new Date();
             currentUTC.toUTCString();
             messsageToSend.timestamp = currentUTC;
-            console.log(ws.readyState)
 
             await AnonChatApi.sendChatMessage(messsageToSend);
             // add user_id to the start of the message string
@@ -256,6 +256,7 @@ const Client = () => {
                     type="text"
                     name="message"
                     size="lg"
+                    max={300}
                     value={formData.message}
                     onChange={handleChange}
                     />
