@@ -23,7 +23,7 @@
 }
 
 .messages-container {
-    width: 70%;
+    width: 100%;
 }
 
 .sent {
@@ -49,6 +49,7 @@
     flex: 1;
     max-width: 80%;
     text-align: left;
+    overflow-wrap: break-word;
 }
 
 .display-guests {

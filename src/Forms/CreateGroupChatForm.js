@@ -1,4 +1,4 @@
-import React, {useContext} from "react";
+import React, {useContext, useEffect} from "react";
 import {useHistory} from "react-router-dom";
 import useFields from '../Hooks/useFields';
 import "./Forms.css";
@@ -35,6 +35,11 @@ const CreateGroupChatForm = () => {
             alert(`Error creating group chat!:${e}`);
         }
     }
+
+    // scroll user to top of page
+    useEffect(() => {
+        window.scrollTo(0, 0)
+    }, []);
 
     // If user is not logged in or loaded yet, return loading
     while(!user) return <h1>Loading...</h1>;

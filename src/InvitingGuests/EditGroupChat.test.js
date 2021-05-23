@@ -20,6 +20,8 @@ describe("EditGroupChat should render list of contacts for user to invite", () =
       ]
     }
 
+    window.scrollTo = jest.fn();
+
     const {asFragment} = render(
       <Provider store={store}>
         <BrowserRouter>

@@ -92,13 +92,20 @@ const Client = () => {
         // wait for ws to be established
         while(!ws) return;
         ws.onmessage = function(evt){
-            try{
+            try {
                 const user_id = parseInt(evt.data.split("")[0]);
                 const message = evt.data.slice(1);
                 const currentTime = new Date();
                 const currentUTC = currentTime.toUTCString();
                 const timestamp = new Date(currentUTC);
-                setMessages(messages => [...messages, {user_id, message, timestamp}])
+                setMessages(messages => [...messages, {user_id, message, timestamp}]);
+                
+                // If user is near the bottom of screen and someone sends a message,
+                // scroll them to the bottom
+                if((window.innerHeight + window.scrollY + 10) >= document.body.scrollHeight){
+                    lastMessageRef.current.scrollIntoView({behavior: "smooth"});
+                }
+
             } catch(e){
                 console.log(e);
                 alert(`Please try again later or refresh the page! ${e}`);
@@ -167,7 +174,7 @@ const Client = () => {
         window.onscroll = async () => {
             if(window.pageYOffset === 0) {
                 const oldMessages = await AnonChatApi.getChatMessages(id, messages.length);
-
+                
                 setTimeout(() => {
                     if(oldMessages.length > 0){
                         setMessages((messages) => [...oldMessages, ...messages]);
@@ -193,10 +200,9 @@ const Client = () => {
 
     // If user is not logged in or loaded yet, return loading
     while(!user) return <h1>Loading...</h1>;
-
     // shuffle the order of the guest list so no one can
     // figure out who made the list
-    room.guests.sort(() => Math.random() - 0.5); 
+    room.guests.sort(() => Math.random() - 0.5);
     return (
         <>
             <div className="display-guests">
@@ -220,7 +226,7 @@ const Client = () => {
                     return (
                         <div ref={lastMessage ? lastMessageRef : index === topMessageOffset ? topMessageRef : null} 
                         key={index}
-                        style={{backgroundColor: m.user_id === user.id ? darkMode.card : 'gray'}}
+                        style={{backgroundColor: m.user_id === user.id ? darkMode.card : darkMode.received}}
                         className={`${m.user_id === user.id ?
                             'sent' : 'received'}`}>
                             <Message

@@ -12,18 +12,22 @@ const colors = {
     lightModeNav: 'light',
     darkModeCard: '#8D2663',
     lightModeCard: '#FFFFFF',
+    darkModeReceived: '#777777',
+    lightModeReceived: '#DDDDDD'
 }
 
 export const LIGHT_MODE = {
     background: colors.lightModeBG,
     card: colors.lightModeBlue,
     nav: colors.lightModeNav,
-    text: colors.lightModeText
+    text: colors.lightModeText,
+    received: colors.lightModeReceived
 }
 
 export const DARK_MODE = {
     background: colors.darkModeBG,
     card: colors.darkModeBlue,
     nav: colors.darkModeNav,
-    text: colors.darkModeText
+    text: colors.darkModeText,
+    received: colors.darkModeReceived
 }

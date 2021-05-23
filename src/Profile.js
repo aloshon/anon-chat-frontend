@@ -30,6 +30,11 @@ const Profile = () => {
         }
     }, [user, dispatch, blockList]);
 
+    // scroll user to top of page
+    useEffect(() => {
+        window.scrollTo(0, 0)
+    }, []);
+
     const handleDelete = () => {
         if(window.confirm("Delete your profile?")){
             logout();

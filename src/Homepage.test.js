@@ -13,6 +13,8 @@ describe("homepage should render", () => {
         blockList: []
     }
 
+    window.scrollTo = jest.fn();
+
     const {asFragment} = render(
       <Provider store={store}>
         <BrowserRouter>

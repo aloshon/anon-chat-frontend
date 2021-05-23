@@ -21,6 +21,8 @@ describe("Profile should render username and block list", () => {
         return user
     }
 
+    window.scrollTo = jest.fn();
+
     const {asFragment} = render(
       <Provider store={store}>
         <BrowserRouter>

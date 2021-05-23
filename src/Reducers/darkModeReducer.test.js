@@ -23,6 +23,7 @@ describe("darkModeReducer", () => {
             card: "#4499E1",
             isDarkMode: true,
             nav: "dark",
+            received: "#777777",
             text: "#EEEEEE",
         }
 

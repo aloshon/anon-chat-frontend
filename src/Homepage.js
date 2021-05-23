@@ -20,6 +20,11 @@ function Homepage(){
         dispatch(fetchInvitedGroupChats());
     }, [dispatch]);
 
+    // scroll user to top of page
+    useEffect(() => {
+        window.scrollTo(0, 0)
+    }, []);
+
     function displayInvitePage(unique_id){
         return history.push(`/invite/${unique_id}`)
     }

@@ -13,6 +13,8 @@ describe("CreateGroupChatForm should render form for user to create group chats"
         blockList: []
     }
 
+    window.scrollTo = jest.fn();
+
     const {asFragment} = render(
       <Provider store={store}>
         <BrowserRouter>
@@ -22,6 +24,7 @@ describe("CreateGroupChatForm should render form for user to create group chats"
         </BrowserRouter>
       </Provider>
     );
+
     test("renders labels", () => {
       const label1 = screen.getByText("Title:");
       const label2 = screen.getByText("Description:");

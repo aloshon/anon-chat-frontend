@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import {NavLink} from "react-router-dom";
 import "./Nav.css";
 import Navbar from 'react-bootstrap/Navbar';
@@ -16,18 +16,19 @@ import UserContext from "./UserContext";
 const NavBar = () => {
     const {user, logout} = useContext(UserContext);
     const darkMode = useSelector(state => state.darkMode);
+    const [expanded, setExpanded] = useState(false);
 
     if(user){
         return (
             <>
-                <Navbar fixed="top" collapseOnSelect expand="md" bg={darkMode.nav} variant={darkMode.nav}>
+                <Navbar fixed="top" expanded={expanded} expand="md" bg={darkMode.nav} variant={darkMode.nav}>
                     <Navbar.Brand href="/" className="m-auto navbar-brand"><h2>anonChat</h2></Navbar.Brand>
-                    <Navbar.Toggle aria-controls="responsive-navbar-nav" />
+                    <Navbar.Toggle onClick={() => setExpanded(expanded ? false : "expanded")} />
                     <Navbar.Collapse id="responsive-navbar-nav">
                         <Nav className="ml-auto navbar-items">
-                            <NavLink to="/create">Create New anonChat</NavLink>
-                            <NavLink to="/contacts">Contacts</NavLink>
-                            <NavLink to="/profile">Profile</NavLink>
+                            <NavLink onClick={() => setExpanded(false)} to="/create">Create New anonChat</NavLink>
+                            <NavLink onClick={() => setExpanded(false)}  to="/contacts">Contacts</NavLink>
+                            <NavLink onClick={() => setExpanded(false)}  to="/profile">Profile</NavLink>
                             <NavLink to="/" id="navbar-logout">
                                 <div className="navbar-logout-div" onClick={logout}>
                                     Logout
@@ -41,7 +42,7 @@ const NavBar = () => {
     }
     
     return (
-            <Navbar fixed="top" bg="dark" variant="dark">
+            <Navbar fixed="top" bg={darkMode.nav} variant={darkMode.nav}>
                 <Navbar.Brand href="/">anonChat</Navbar.Brand>
                 <Nav className="ml-auto navbar-items">
                     <NavLink data-testid="signup" to="/signup">Sign Up</NavLink>

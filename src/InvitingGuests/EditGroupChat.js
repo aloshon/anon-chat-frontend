@@ -55,6 +55,12 @@ const EditGroupChat = () => {
           getContactList(dispatch, user.contactList);
       }
   }, [user, dispatch]);
+
+  // scroll user to top of page
+  useEffect(() => {
+    window.scrollTo(0, 0)
+  }, []);
+
     // wait for user and groupChat data to be loaded before attempting to run 
     // the rest of the code
     if(!groupChat || groupChat.guests === undefined || !user){
