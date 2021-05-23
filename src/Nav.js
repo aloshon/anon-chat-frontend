@@ -27,9 +27,9 @@ const NavBar = () => {
                     <Navbar.Collapse id="responsive-navbar-nav">
                         <Nav className="ml-auto navbar-items">
                             <NavLink onClick={() => setExpanded(false)} to="/create">Create New anonChat</NavLink>
-                            <NavLink onClick={() => setExpanded(false)}  to="/contacts">Contacts</NavLink>
-                            <NavLink onClick={() => setExpanded(false)}  to="/profile">Profile</NavLink>
-                            <NavLink to="/" id="navbar-logout">
+                            <NavLink onClick={() => setExpanded(false)} to="/contacts">Contacts</NavLink>
+                            <NavLink onClick={() => setExpanded(false)} to="/profile">Profile</NavLink>
+                            <NavLink onClick={() => setExpanded(false)} to="/" id="navbar-logout">
                                 <div className="navbar-logout-div" onClick={logout}>
                                     Logout
                                 </div>
