@@ -11,7 +11,7 @@
     padding: 0;
     display: flex;
     flex-direction: column;
-    width: 60%;
+    width: 95%;
 }
 
 .messages .received {

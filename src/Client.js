@@ -212,7 +212,7 @@ const Client = () => {
                  View Guest List
             </Button>
             </div>
-            <Container className="messages">
+            <Container className="messages" fluid>
                 {messages.map((m, index) => {
                     // checks the length of messages to see if message is at end of list
                     // Reference that to scroll to bottom
