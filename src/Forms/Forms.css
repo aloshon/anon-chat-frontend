@@ -9,10 +9,6 @@
     overflow: hidden;
 }
 
-.createform button{
-    margin: 3px;
-}
-
 .create-chat-header{
     font-size: 31px;
     text-align: center;
