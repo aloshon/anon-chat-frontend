@@ -79,8 +79,7 @@ export function addGroupChat(newGroupChat){
         try{
             // Convert to unviersal time GMT
             let currentUTC = new Date();
-            currentUTC.toUTCString();
-            newGroupChat.timestamp = currentUTC;
+            newGroupChat.timestamp = currentUTC.toUTCString();
             const {data} = await axios.post(
                 `${BASE_URL}/chat/`,
                 newGroupChat,

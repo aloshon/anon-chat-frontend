@@ -93,7 +93,7 @@ const Client = () => {
         while(!ws) return;
         ws.onmessage = function(evt){
             try {
-                const user_id = parseInt(evt.data.split("")[0]);
+                const user_id = parseInt(evt.data.split(" ")[0]);
                 const message = evt.data.slice(1);
                 const currentTime = new Date();
                 const currentUTC = currentTime.toUTCString();
@@ -114,8 +114,9 @@ const Client = () => {
 
         ws.onclose = function(evt){
             console.log("DISCONNECTED!!");
-            ws.close();
-        }
+            // Wait for socket to close and then reconnect
+            setTimeout(setWs(new WebSocket(`wss://anon-chat-backend.herokuapp.com/chat/${id}`)), 1000);
+        };
 
         ws.onerror = function(evt){
             console.log(evt);
@@ -135,19 +136,17 @@ const Client = () => {
             }
             // Convert to unviersal time UTC and send it to database
             let currentUTC = new Date();
-            currentUTC.toUTCString();
-            messsageToSend.timestamp = currentUTC;
+            messsageToSend.timestamp = currentUTC.toUTCString();
 
             await AnonChatApi.sendChatMessage(messsageToSend);
-            // add user_id to the start of the message string
-            const message = `${user.id}` + formData.message;
-            // wait for ws state to be ready to send message
-            ws.send(message); 
             return
         }
 
         if(sendMessage){
-
+            // add user_id to the start of the message string
+            const message = `${user.id} ` + formData.message;
+            // wait for ws state to be ready to send message
+            ws.send(message);
             postMessageToAPI();
             resetFormData();
             // disable the send button for half a second
