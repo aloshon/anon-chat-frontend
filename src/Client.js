@@ -1,5 +1,5 @@
 import React, {useEffect, useState, useContext, useRef} from "react";
-import {useParams, useHistory, Redirect} from "react-router-dom";
+import {useParams, useHistory} from "react-router-dom";
 import AnonChatApi from "./api";
 import useFields from "./Hooks/useFields";
 import UserContext from "./UserContext";
@@ -51,8 +51,8 @@ const Client = () => {
     useEffect(() => {
         if (ws === null) {
             /** The localhost url is only for development */
-            setWs(new WebSocket(`ws://localhost:3001/chat/${id}`)); 
-            // setWs(new WebSocket(`wss://anon-chat-backend.herokuapp.com/chat/${id}`));
+            // setWs(new WebSocket(`ws://localhost:3001/chat/${id}`)); 
+            setWs(new WebSocket(`wss://anon-chat-backend.herokuapp.com/chat/${id}`));
         }
         return () => {
             if(ws){
@@ -78,8 +78,7 @@ const Client = () => {
             } catch(e){
                 if(e[0] === "Not invited in this group chat!"){
                     alert(e[0]);
-                    history.push('/')
-                    return <Redirect to='/'/>;
+                    history.push('/');
                 }
             }
         }
@@ -116,8 +115,8 @@ const Client = () => {
             console.log("DISCONNECTED!!");
             // Wait for socket to close and then reconnect
             /** The localhost url is only for development */
-            setWs(new WebSocket(`ws://localhost:3001/chat/${id}`)); 
-            // setTimeout(setWs(new WebSocket(`wss://anon-chat-backend.herokuapp.com/chat/${id}`)), 1000);
+            // setWs(new WebSocket(`ws://localhost:3001/chat/${id}`)); 
+            setTimeout(setWs(new WebSocket(`wss://anon-chat-backend.herokuapp.com/chat/${id}`)), 1000);
         };
 
         ws.onerror = function(evt){
