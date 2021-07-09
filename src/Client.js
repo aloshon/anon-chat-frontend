@@ -51,8 +51,8 @@ const Client = () => {
     useEffect(() => {
         if (ws === null) {
             /** The localhost url is only for development */
-            // setWs(new WebSocket(`ws://localhost:3001/chat/${id}`)); 
-            setWs(new WebSocket(`wss://anon-chat-backend.herokuapp.com/chat/${id}`));
+            setWs(new WebSocket(`ws://localhost:3001/chat/${id}`)); 
+            // setWs(new WebSocket(`wss://anon-chat-backend.herokuapp.com/chat/${id}`));
         }
         return () => {
             if(ws){
@@ -115,7 +115,9 @@ const Client = () => {
         ws.onclose = function(evt){
             console.log("DISCONNECTED!!");
             // Wait for socket to close and then reconnect
-            setTimeout(setWs(new WebSocket(`wss://anon-chat-backend.herokuapp.com/chat/${id}`)), 1000);
+            /** The localhost url is only for development */
+            setWs(new WebSocket(`ws://localhost:3001/chat/${id}`)); 
+            // setTimeout(setWs(new WebSocket(`wss://anon-chat-backend.herokuapp.com/chat/${id}`)), 1000);
         };
 
         ws.onerror = function(evt){
@@ -134,9 +136,6 @@ const Client = () => {
                 user_id: user.id, 
                 group_chat_id: room.id
             }
-            // Convert to unviersal time UTC and send it to database
-            let currentUTC = new Date();
-            messsageToSend.timestamp = currentUTC.toUTCString();
 
             await AnonChatApi.sendChatMessage(messsageToSend);
             return

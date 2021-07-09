@@ -21,7 +21,6 @@ export function fetchInvitedGroupChats(){
             const {data} = await axios.get(
                 `${BASE_URL}/chat/`,
                 {headers: headers});
-            
             dispatch(gotInvitedChats(data));
         } catch(e){
             console.log(e);
@@ -77,9 +76,6 @@ function gotGroupChat(groupChat){
 export function addGroupChat(newGroupChat){
     return async function(dispatch){
         try{
-            // Convert to unviersal time GMT
-            let currentUTC = new Date();
-            newGroupChat.timestamp = currentUTC.toUTCString();
             const {data} = await axios.post(
                 `${BASE_URL}/chat/`,
                 newGroupChat,

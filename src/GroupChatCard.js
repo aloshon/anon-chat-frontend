@@ -15,8 +15,8 @@ import {useSelector} from "react-redux";
 const GroupChatCard = ({unique_id, title, description, timestamp, creator_id, displayInvitePage}) => {
     const {user} = useContext(UserContext);
     const darkMode = useSelector(state => state.darkMode);
-    const localTime = new Date(timestamp);
-
+    const localTime = new Date(timestamp).toLocaleString();
+    
     return (
         <Card className="mt-4 group-chat-card" style={{backgroundColor: darkMode.card}}>
             <NavLink exact to={`/chat/${unique_id}`}>
@@ -30,7 +30,7 @@ const GroupChatCard = ({unique_id, title, description, timestamp, creator_id, di
             <Card.Body className="group-chat-card-body">
                     <Card.Text as="h6">{description}</Card.Text>
                 <div className="group-chat-card-description">
-                    <small>{localTime.toLocaleString()}</small>
+                    <small>{localTime}</small>
                     {user.id === creator_id && <>
                     <Button className="group-chat-card-button" variant="success" onClick={() => displayInvitePage(unique_id)}>Edit</Button>
                     </>}
