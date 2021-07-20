@@ -23,18 +23,14 @@ const EditGroupChat = () => {
         async function getGroupChatOnRender(){
             dispatch(fetchGroupChat(id));
         }
-        // Make sure the state is filled with the correct data
-        if(!groupChat || groupChat.guests === undefined){
+        // Make sure the state is filled
+        if(!groupChat){
             getGroupChatOnRender()
         }
       } catch(e) {
-        if(e[0] === "Not invited in this group chat!"){
-          alert(e[0]);
-          history.push('/')
-        }
-        else{
-          alert(e[0])
-        }
+        alert(e[0]);
+        // Kick out uninvited guests
+        if(e[0] === "Not invited in this group chat!") history.push('/');
       }
     }, [dispatch, id, user, groupChat, history]);
 

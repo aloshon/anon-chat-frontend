@@ -8,8 +8,8 @@ export default function darkModeReducer (state=INITIAL_STATE, action){
             // Toggle the app style bewteen light mode and dark mode
             // isDarkMode is set to the opposite of what state originally was
             const isDarkMode = !state.isDarkMode;
-            const colorPallet = isDarkMode ? DARK_MODE : LIGHT_MODE;
-            return { ...state, isDarkMode, ...colorPallet };
+            const colorTheme = isDarkMode ? DARK_MODE : LIGHT_MODE;
+            return { ...state, isDarkMode, ...colorTheme };
 
         default:
             return state;

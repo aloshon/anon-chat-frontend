@@ -1,5 +1,5 @@
 import React, {useEffect, useContext} from "react";
-import { useDispatch, useSelector, shallowEqual } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import Contact from "./Contact";
 import AddContactForm from "../Forms/AddContactForm";
 import Container from "react-bootstrap/Container";
@@ -11,18 +11,18 @@ import UserContext from "../UserContext";
  * User needs to be logged in
  */
 const ContactList = () => {
-    const contacts = useSelector(state => state.contacts, shallowEqual);
+    const contacts = useSelector(state => state.contacts);
     const dispatch = useDispatch();
     const {user} = useContext(UserContext);
 
     // Get the user's contactList on render after user is defined
     useEffect(() =>{
-      if(user && contacts.length === 0){
+      if(user){
           getContactList(dispatch, user.contactList);
       }
-  }, [user, dispatch, contacts]);
+  }, [user, dispatch]);
 
-  // If user is not logged in or loaded yet, return loading
+  // If user is not loaded yet, return loading
   while(!user) return <h1>Loading...</h1>;
 
     // marginBottom style is to keep the last contact

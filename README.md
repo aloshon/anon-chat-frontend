@@ -1,5 +1,18 @@
 # Getting Started with Create React App
 
+Frontend for anon-chat-backend. Users can chat with other users added on their contact lists anonymously about any subject. Users won't have to worry about being judged for their opinions so they can actually speak their mind. 
+
+For development: 
+    In Client.js there are 2 parts which need to be adjusted, lines 53 and 118
+    The WebSocket link is different for development than deployment.
+    Simply comment out the one that is not going to be used and uncomment the one
+    you will use!
+
+Technologies Used:
+    - WebSockets for live chatting
+    - Redux for predictable state and saving some user inputs in local storage
+    - Bootstrap for simple CSS styling
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts

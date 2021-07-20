@@ -55,6 +55,9 @@ const Client = () => {
             setWs(new WebSocket(`wss://anon-chat-backend.herokuapp.com/chat/${id}`));
         }
         return () => {
+            // A function returned from useEffect will
+            // get called on component unmount. i.e. when user leaves page
+            // Just make sure ws is defined to avoid errors
             if(ws){
                 console.log("closing ws due to unmount!");
             
@@ -73,11 +76,11 @@ const Client = () => {
                 setMessages(oldMessages);
                 setRoom(groupChat);
                 if(lastMessageRef.current){
-                    lastMessageRef.current.scrollIntoView({ smooth: true});
+                    lastMessageRef.current.scrollIntoView({ smooth: true });
                 }
             } catch(e){
+                alert(e[0]);
                 if(e[0] === "Not invited in this group chat!"){
-                    alert(e[0]);
                     history.push('/');
                 }
             }
@@ -90,6 +93,7 @@ const Client = () => {
     useEffect(() => {
         // wait for ws to be established
         while(!ws) return;
+        // when ws connection is open and someone sends a message
         ws.onmessage = function(evt){
             try {
                 const user_id = parseInt(evt.data.split(" ")[0]);
@@ -97,6 +101,7 @@ const Client = () => {
                 const currentTime = new Date();
                 const currentUTC = currentTime.toUTCString();
                 const timestamp = new Date(currentUTC);
+                
                 setMessages(messages => [...messages, {user_id, message, timestamp}]);
                 
                 // If user is near the bottom of screen and someone sends a message,
@@ -114,8 +119,9 @@ const Client = () => {
         ws.onclose = function(evt){
             console.log("DISCONNECTED!!");
             // Wait for socket to close and then reconnect
+
             /** The localhost url is only for development */
-            // setWs(new WebSocket(`ws://localhost:3001/chat/${id}`)); 
+            // setTimeout(setWs(new WebSocket(`ws://localhost:3001/chat/${id}`))); 
             setTimeout(setWs(new WebSocket(`wss://anon-chat-backend.herokuapp.com/chat/${id}`)), 1000);
         };
 
@@ -170,11 +176,11 @@ const Client = () => {
     useEffect(() => {
         window.onscroll = async () => {
             if(window.pageYOffset === 0) {
-                const oldMessages = await AnonChatApi.getChatMessages(id, messages.length);
+                const olderMessages = await AnonChatApi.getChatMessages(id, messages.length);
                 
                 setTimeout(() => {
-                    if(oldMessages.length > 0){
-                        setMessages((messages) => [...oldMessages, ...messages]);
+                    if(olderMessages.length > 0){
+                        setMessages((messages) => [...olderMessages, ...messages]);
                         if(topMessageRef.current){
                             topMessageRef.current.scrollIntoView();
                         }
@@ -182,6 +188,7 @@ const Client = () => {
                 }, 1300);
             }
         };
+        // Avoids error because setTimeOut loses topMessageRef after component unmount
         return () => {}
     }, [messages]);
 
@@ -191,12 +198,9 @@ const Client = () => {
         history.push("/");
     }
 
-    if(!room){
-        return <h1>Loading...</h1>
-    }
+    // If user or room is not loaded, wait
+    while(!user || !room) return <h1>Loading...</h1>;
 
-    // If user is not logged in or loaded yet, return loading
-    while(!user) return <h1>Loading...</h1>;
     // shuffle the order of the guest list so no one can
     // figure out who made the list
     room.guests.sort(() => Math.random() - 0.5);
@@ -215,9 +219,10 @@ const Client = () => {
                     // Reference that to scroll to bottom
                     const lastMessage = messages.length - 1 === index;
                     let timestamp = new Date(m.timestamp).toLocaleTimeString();
-                    // After new messages, if the list is not divisible by 25,
-                    // adjust topMessageRef.
-                    // So the user stays on the same message after more are loaded on top
+                    // Because we get 25 at a time, after getting new messages if the list is not divisible by 25,
+                    // this means there no more messages, adjust topMessageRef.
+                    // So the user stays on the same message after last messages are loaded on top
+                    // 24 is the default that allows the user to stay on the same spot as more load on top
                     const topMessageOffset = messages.length % 25 !== 0 ? (messages.length % 25 - 1) : 24;
                     
                     return (

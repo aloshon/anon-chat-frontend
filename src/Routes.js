@@ -14,6 +14,7 @@ import Profile from "./Profile";
  * Routes renders all the routes the user can access
  * If the user is not logged in, homepage will be replaced
  * by the log in form
+ * Render 404 page if path not defined
  */
 const Routes = () => {
     const {user} = useContext(UserContext);
@@ -43,6 +44,13 @@ const Routes = () => {
             </Route>
             <Route exact path="/profile">
                 <Profile />
+            </Route>
+            <Route>
+                <h1>ERROR 404</h1>
+                <p>Hmmm. I can't seem to find what you want...</p>
+                <img src=
+                "https://image.freepik.com/free-vector/funny-error-404-background-design_1167-219.jpg"
+                />
             </Route>
         </Switch>
     )

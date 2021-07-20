@@ -1,8 +1,7 @@
 import axios from "axios";
 
 const BASE_URL = process.env.REACT_APP_BASE_URL || "http://localhost:3001";
-console.log(BASE_URL)
-console.log(process.env.REACT_APP_BASE_URL);
+
 /** API Class.
  *
  * Static class tying together methods used to get/send to the API
@@ -17,7 +16,7 @@ class AnonChatApi {
   static async request(endpoint, data = {}, method = "get") {
     const url = `${BASE_URL}/${endpoint}`;
     const headers = { Authorization: `Bearer ${AnonChatApi.token}` };
-    
+    // Get requests extract data from the req.params property, not from req.body
     const params = (method === "get")
         ? data
         : {};
@@ -33,7 +32,10 @@ class AnonChatApi {
 
   // Individual API routes
 
-  /** Get chat messages from group chat id. */
+  /** Get chat messages from group chat id.
+   * offset is the current length of messages list
+   * So we know what messages we already loaded
+   */
 
   static async getChatMessages(id, offset) {
     let res = await this.request(`message/${id}`, {offset});

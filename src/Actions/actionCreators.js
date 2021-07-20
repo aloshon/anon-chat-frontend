@@ -276,6 +276,7 @@ function invitedGuest(data){
 }
 
 // For actions that don't require axios and promises.
+
 /** 
  * getBlockList gets user's block list, should be loaded when user is logged in
  * data should be blockList: [{blockedUser}, ...]

@@ -2,7 +2,7 @@ import React, { useContext, useEffect } from "react";
 import UserContext from "./UserContext";
 import Container from "react-bootstrap/Container";
 import Button from "react-bootstrap/Button";
-import {useSelector, shallowEqual, useDispatch} from "react-redux";
+import {useSelector, useDispatch} from "react-redux";
 import BlockedUser from "./BlockedUser";
 import AddUserToBlockListForm from "./Forms/AddUserToBlockListForm";
 import {toggleDarkMode} from "./Actions/actionCreators";
@@ -20,15 +20,15 @@ const Profile = () => {
     const {user, logout} = useContext(UserContext);
     const dispatch = useDispatch();
     const history = useHistory();
-    const blockList = useSelector(state => state.blockList, shallowEqual);
+    const blockList = useSelector(state => state.blockList);
     const darkMode = useSelector(state => state.darkMode);
    
     // Get the user's blockList on render after user is defined
     useEffect(() =>{
-        if(user && blockList.length === 0){
+        if(user){
             getBlockList(dispatch, user.blockList);
         }
-    }, [user, dispatch, blockList]);
+    }, [user, dispatch]);
 
     // scroll user to top of page
     useEffect(() => {
@@ -63,7 +63,7 @@ const Profile = () => {
                 {darkMode.isDarkMode ? "dark mode" : "light mode"}
                 </label>
             </div>
-            <AddUserToBlockListForm />
+            <AddUserToBlockListForm blockList={blockList} />
             <h5 style={{marginTop: "90px"}}>Block List</h5>
             <Container>
                 {blockList.length !== 0 ? blockList.map(b => (

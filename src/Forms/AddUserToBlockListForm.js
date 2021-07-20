@@ -12,8 +12,9 @@ import {blockUser} from "../Actions/actionCreators";
 /**
  * AddUserToBlockListForm component renders form for blocking users
  * by username
+ * If user is already blocked, send an alert
  */
-const AddUserToBlockListForm = () => {
+const AddUserToBlockListForm = ({blockList}) => {
     const dispatch = useDispatch();
     const {user} = useContext(UserContext)
     const [formData, handleChange, resetFormData] = useFields({
@@ -23,11 +24,18 @@ const AddUserToBlockListForm = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try{
+            // Make sure user is not blocking themselves, someone twice, 
+            // or if the other user blocked them
             if(formData.username === user.username) return
+
             let userToBlock = await AnonChatApi.checkForUser(formData.username);
             if(!userToBlock){
                 throw `No user with username: ${formData.username}`
             }
+
+            let alreadyBlocked = blockList.find(u => u.blocked_username === formData.username);
+            if(alreadyBlocked) throw `User already blocked ${formData.username}`;
+
             dispatch(blockUser(formData.username));
             resetFormData();
             return

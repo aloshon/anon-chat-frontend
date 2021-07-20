@@ -37,7 +37,6 @@ const AddContactForm = () => {
             contacts.forEach((c) => {
                 if(c.username === formData.username){
                     duplicate = true;
-                    return
                 }
                 return
             });

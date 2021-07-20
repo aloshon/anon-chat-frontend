@@ -5,7 +5,6 @@ import { store } from "./store"
 import {BrowserRouter} from 'react-router-dom';
 import UserContext from "./UserContext";
 
-
 describe("homepage should render", () => {
     const user = {
         id: 1,
@@ -20,7 +19,7 @@ describe("homepage should render", () => {
         <BrowserRouter>
             <UserContext.Provider value={{user}}>
                 <Homepage/>
-            </UserContext.Provider>
+             </UserContext.Provider>
         </BrowserRouter>
       </Provider>
     );

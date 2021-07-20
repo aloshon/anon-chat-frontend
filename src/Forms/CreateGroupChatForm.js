@@ -31,8 +31,8 @@ const CreateGroupChatForm = () => {
             await dispatch(addGroupChat(formData));
             history.push('/');
         } catch(e){
-            console.log(`Error creating group chat!:${e}`)
-            alert(`Error creating group chat!:${e}`);
+            console.log(`Error creating group chat! ${e}`)
+            alert(`Error creating group chat! ${e}`);
         }
     }
 

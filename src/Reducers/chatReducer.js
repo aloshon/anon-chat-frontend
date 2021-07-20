@@ -17,7 +17,7 @@ export default function chatReducer (state=INITIAL_STATE, action){
             // With guests as an array of objects, 
             // add guest to guest list
             // replace and delete unique_id as 
-            //it is only needed to locate group chat
+            // it is only needed to locate group chat
             const groupChat = state[action.payload.unique_id];
             const unique_id = action.payload.unique_id;
             delete action.payload.unique_id;

@@ -36,12 +36,11 @@ function App() {
 
   // Try to set token and sign up user, if error occurs,
   // display it in console and throw error
-  // If successful then the page redirect and user is signed in
+  // If successful then the page redirects and user is signed in
   async function signup(data) {
     try {
       let token = await AnonChatApi.getSignup(data);
       setToken(token);
-      localStorage.setItem("token", token);
       return true;
     } catch (e) {
       console.error(`Error Signing In: ${e}`);
@@ -50,12 +49,11 @@ function App() {
   }
 
   // Try to set token, if error occurs, display it in console and throw error
-  // If successful then the page redirect and user is logged in
+  // If successful then the page redirects and user is logged in
   async function login(data) {
     try {
       let token = await AnonChatApi.getLogin(data);
       setToken(token);
-      localStorage.setItem("token", token);
       return true;
     } catch (e) {
       console.error(`Error Logging In: ${e}`);
@@ -69,6 +67,7 @@ function App() {
     setToken(null);
   }
 
+  // Set body background color to the proper theme
   document.body.style.backgroundColor = darkMode.background;
 
   return (

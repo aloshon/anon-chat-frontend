@@ -18,6 +18,7 @@ const InviteContact = ({unique_id, user_id, group_chat_id, nickname, username, g
         if(guestList){
             guestList.forEach(g => {
                 if(g.user_id === user_id){
+                    // user is already on guest list
                     setInvited(true)
                 } 
             })
