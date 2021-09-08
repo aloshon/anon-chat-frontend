@@ -25,9 +25,12 @@ const AddContactForm = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try{
-            
+            if(formData.username === user.username) {
+                resetFormData();
+                return;
+            }
             let userToAdd = await AnonChatApi.checkForUser(formData.username);
-            if(formData.username === user.username) return
+            
             if(!userToAdd){
                 throw new Error(`No user with username: ${formData.username}`)
             }
@@ -40,12 +43,15 @@ const AddContactForm = () => {
                 }
                 return
             });
-            if(duplicate) return;
+            if(duplicate) {
+                resetFormData();
+                return;
+            }
             formData.user_id = userToAdd.id;
             formData.owner_id = user.id;
           
             dispatch(addContact(formData))
-            resetFormData();
+            
             return
         } catch(e){
             console.log(`Error adding contact! ${e}`)

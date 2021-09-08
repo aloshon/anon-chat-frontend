@@ -43,13 +43,13 @@ const EditGroupChat = () => {
     }
   }
 
-    const contacts = useSelector(state => state.contacts, shallowEqual);
+  const contacts = useSelector(state => state.contacts, shallowEqual);
 
-    // Get the user's contactList on render after user is defined
-    useEffect(() =>{
-      if(user){
-          getContactList(dispatch, user.contactList);
-      }
+  // Get the user's contactList on render after user is defined
+  useEffect(() =>{
+    if(user){
+        getContactList(dispatch, user.contactList);
+    }
   }, [user, dispatch]);
 
   // scroll user to top of page
@@ -59,7 +59,7 @@ const EditGroupChat = () => {
 
     // wait for user and groupChat data to be loaded before attempting to run 
     // the rest of the code
-    if(!groupChat || groupChat.guests === undefined || !user){
+    if(!groupChat || !user){
         return <h1>Loading guest list...</h1>
     }
 
@@ -69,7 +69,6 @@ const EditGroupChat = () => {
     }
 
     const {guests} = groupChat;
-
     // If user is not logged in or loaded yet, return loading
     while(!user) return <h1>Loading...</h1>;
 

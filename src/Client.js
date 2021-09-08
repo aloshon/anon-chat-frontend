@@ -51,8 +51,8 @@ const Client = () => {
     useEffect(() => {
         if (ws === null) {
             /** The localhost url is only for development */
-            // setWs(new WebSocket(`ws://localhost:3001/chat/${id}`)); 
-            setWs(new WebSocket(`wss://anon-chat-backend.herokuapp.com/chat/${id}`));
+            setWs(new WebSocket(`ws://localhost:3001/chat/${id}`)); 
+            // setWs(new WebSocket(`wss://anon-chat-backend.herokuapp.com/chat/${id}`));
         }
         return () => {
             // A function returned from useEffect will
@@ -97,7 +97,8 @@ const Client = () => {
         ws.onmessage = function(evt){
             try {
                 const user_id = parseInt(evt.data.split(" ")[0]);
-                const message = evt.data.slice(1);
+                // Get everything besides the user id
+                const message = evt.data.substr(evt.data.indexOf(' ')+1);
                 const currentTime = new Date();
                 const currentUTC = currentTime.toUTCString();
                 const timestamp = new Date(currentUTC);
@@ -106,7 +107,7 @@ const Client = () => {
                 
                 // If user is near the bottom of screen and someone sends a message,
                 // scroll them to the bottom
-                if((window.innerHeight + window.scrollY + 10) >= document.body.scrollHeight){
+                if((window.innerHeight + window.scrollY + 20) >= document.body.scrollHeight){
                     lastMessageRef.current.scrollIntoView({behavior: "smooth"});
                 }
 
@@ -121,8 +122,8 @@ const Client = () => {
             // Wait for socket to close and then reconnect
 
             /** The localhost url is only for development */
-            // setTimeout(setWs(new WebSocket(`ws://localhost:3001/chat/${id}`))); 
-            setTimeout(setWs(new WebSocket(`wss://anon-chat-backend.herokuapp.com/chat/${id}`)), 1000);
+            setTimeout(setWs(new WebSocket(`ws://localhost:3001/chat/${id}`)), 1000); 
+            // setTimeout(setWs(new WebSocket(`wss://anon-chat-backend.herokuapp.com/chat/${id}`)), 1000);
         };
 
         ws.onerror = function(evt){
