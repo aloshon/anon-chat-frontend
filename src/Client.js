@@ -77,6 +77,7 @@ const Client = () => {
                 setRoom(groupChat);
                 if(lastMessageRef.current){
                     lastMessageRef.current.scrollIntoView({ smooth: true });
+                    window.scroll(0, window.innerHeight + window.scrollY + 20); // slightly above bottom
                 }
                 if(oldMessages.length < 7){
                     window.scroll(0,0);
