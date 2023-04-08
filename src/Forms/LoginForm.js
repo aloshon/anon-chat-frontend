@@ -27,7 +27,7 @@ const LoginForm = () => {
             }
         }catch(e){
             console.log(`Error Logging in!:${e}`)
-            alert(e)
+            alert("Error logging in! Please refresh the page and try again!")
         }
     }
 

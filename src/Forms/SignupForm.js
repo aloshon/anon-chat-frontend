@@ -27,7 +27,7 @@ const SignupForm = () => {
             }
         }catch(e){
             console.log(`Error signing up!:${e}`)
-            alert(e)
+            alert("Error signing up! Please refresh the page and try again!")
         }
     }
 
