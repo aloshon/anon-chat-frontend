@@ -15,9 +15,11 @@ function App() {
 
   useEffect(function getUserFromToken() {
     async function getUser() {
+      console.log(token);
       if(token){
         try{
-          let {username} = jwt.decode(token);
+          let {username} = jwt.decode(token, {complete: true}).payload;
+          console.log(username)
           // insert the token onto the API class
           AnonChatApi.token = token;
           let currentUser = await AnonChatApi.getUser(username);

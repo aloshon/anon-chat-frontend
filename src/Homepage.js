@@ -22,7 +22,7 @@ function Homepage(){
 
     // scroll user to top of page
     useEffect(() => {
-        window.scrollTo(0, 0)
+        window.scrollTo(0, 0);
     }, []);
 
     function displayInvitePage(unique_id){

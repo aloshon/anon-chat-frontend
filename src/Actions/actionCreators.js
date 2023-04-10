@@ -2,8 +2,9 @@ import axios from "axios";
 import {FETCH_INVITED_CHATS, FETCH_GROUP_CHAT, FETCH_BLOCK_LIST, FETCH_GUEST_LIST, ADD_GROUP_CHAT, ADD_CONTACT, BLOCK_USER, UNBLOCK_USER, DELETE_GROUP_CHAT, DELETE_CONTACT, TOGGLE_DARK_MODE, INVITE_GUEST, FETCH_CONTACT_LIST } from "./actionTypes";
 const BASE_URL = process.env.REACT_APP_BASE_URL || "http://localhost:3001";
 // This is used for the post request routes that require authorization
-const token = JSON.parse(localStorage.getItem("token"));
-const headers = { Authorization: `Bearer ${token}` };;
+const token = localStorage.getItem("token");
+console.log(token);
+const headers = { Authorization: `Bearer ${token}` };
 
 /** 
  * fetchInvitedGroupChats gets user data from token and fetches the group chats
@@ -14,7 +15,7 @@ const headers = { Authorization: `Bearer ${token}` };;
 */
 export function fetchInvitedGroupChats(){
     return async function(dispatch){
-        const token = JSON.parse(localStorage.getItem("token"));
+        const token = localStorage.getItem("token");
         const headers = { Authorization: "Bearer " + token};
 
         try{
