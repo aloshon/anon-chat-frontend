@@ -51,8 +51,8 @@ const Client = () => {
     useEffect(() => {
         if (ws === null) {
             /** The localhost url is only for development */
-            setWs(new WebSocket(`ws://localhost:3001/chat/${id}`)); 
-            // setWs(new WebSocket(`wss://anon-chat-backend.herokuapp.com/chat/${id}`));
+            // setWs(new WebSocket(`ws://localhost:3001/chat/${id}`)); 
+            setWs(new WebSocket(`wss://worker-production-cb67.up.railway.app/chat/${id}`));
         }
         return () => {
             // A function returned from useEffect will
@@ -130,7 +130,7 @@ const Client = () => {
 
             /** The localhost url is only for development */
             // setTimeout(setWs(new WebSocket(`ws://localhost:3001/chat/${id}`)), 1000); 
-            setTimeout(setWs(new WebSocket(`wss://anon-chat-backend.herokuapp.com/chat/${id}`)), 1000);
+            setTimeout(setWs(new WebSocket(`wss://worker-production-cb67.up.railway.app/chat/${id}`)), 1000);
         };
 
         ws.onerror = function(evt){
