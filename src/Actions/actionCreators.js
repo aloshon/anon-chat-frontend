@@ -4,6 +4,7 @@ const BASE_URL = process.env.REACT_APP_BASE_URL || "http://localhost:3001";
 // This is used for the post request routes that require authorization
 const token = localStorage.getItem("token");
 console.log(token);
+console.log(BASE_URL);
 const headers = { Authorization: `Bearer ${token}` };
 
 /** 
