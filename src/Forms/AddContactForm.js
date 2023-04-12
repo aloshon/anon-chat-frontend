@@ -49,6 +49,8 @@ const AddContactForm = () => {
             }
             formData.user_id = userToAdd.id;
             formData.owner_id = user.id;
+            console.log("HERERRE")
+            console.log(formData)
           
             dispatch(addContact(formData))
             
