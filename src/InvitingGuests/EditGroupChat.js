@@ -44,9 +44,10 @@ const EditGroupChat = () => {
   }
 
   const contacts = useSelector(state => state.contacts, shallowEqual);
-
+console.log(contacts)
   // Get the user's contactList on render after user is defined
   useEffect(() =>{
+    console.log(user)
     if(user){
         getContactList(dispatch, user.contactList);
     }
@@ -70,7 +71,7 @@ const EditGroupChat = () => {
 
     const {guests} = groupChat;
     // If user is not logged in or loaded yet, return loading
-    while(!user) return <h1>Loading...</h1>;
+    while(!user && !user.contactList) return <h1>Loading...</h1>;
 
     // The Contact component should have an invite button
     // disabled and text invited for those contacts already on guest list
