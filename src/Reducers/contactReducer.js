@@ -4,8 +4,12 @@ const INITIAL_STATE = [];
 export default function contactReducer (state=INITIAL_STATE, action){
     switch(action.type){
         case FETCH_CONTACT_LIST:
+            console.log("HERE")
+            console.log(state)
+            console.log(action)
+            const contacts = action.payload.length > 0 ? action.payload : state;
             // Fetch the contact list from user
-            return [...action.payload]
+            return [...contacts]
 
         case ADD_CONTACT:
             // With state as an array of objects, add contact's user_id
