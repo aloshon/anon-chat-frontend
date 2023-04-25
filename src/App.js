@@ -69,7 +69,7 @@ function App() {
     setToken(null);
   }
 
-  // Set body background color to the proper theme 
+  // Set body background color to the proper theme
   document.body.style.backgroundColor = darkMode.background;
 
   return (
