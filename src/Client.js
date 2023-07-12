@@ -45,6 +45,7 @@ const Client = () => {
     const [room, setRoom] = useState(null);
     const [sendMessage, setSendMessage] = useState(false);
     const [showGuests, setShowGuests] = useState(false);
+    const [showLoading, setShowLoading] = useState(false);
 
     const [ws, setWs] = useState(null);
 
@@ -114,7 +115,7 @@ const Client = () => {
                 // scroll them to the bottom
                 if((window.innerHeight + window.scrollY + 20) >= document.body.scrollHeight){
                     if(messages.length > 5){
-                        lastMessageRef.current.scrollIntoView({behavior: "smooth"});
+                        lastMessageRef.current.scrollIntoView({behavior: "smooth", block: "end"});
                     }
                 }
 
@@ -187,7 +188,7 @@ const Client = () => {
         window.onscroll = async () => {
             if(window.pageYOffset === 0) {
                 const olderMessages = await AnonChatApi.getChatMessages(id, messages.length);
-                
+                setShowLoading(true);
                 setTimeout(() => {
                     if(olderMessages.length > 0){
                         setMessages((messages) => [...olderMessages, ...messages]);
@@ -195,6 +196,7 @@ const Client = () => {
                             topMessageRef.current.scrollIntoView();
                         }
                     }
+                    setShowLoading(false);
                 }, 1300);
             }
         };
@@ -223,6 +225,7 @@ const Client = () => {
                  View Guest List
             </Button>
             </div>
+            {showLoading && <div className="loading-old-messages">Loading...</div>}
             <Container className="messages" fluid>
                 {messages.map((m, index) => {
                     // checks the length of messages to see if message is at end of list
