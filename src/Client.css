@@ -1,3 +1,10 @@
+.loading-old-messages {
+    display: inline-block;
+    position: fixed;
+    transform: translateX(-50%);
+    margin-top: 50px;
+}
+
 .send-message-form {
     display: flex;
     flex-direction: row;
