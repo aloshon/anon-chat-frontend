@@ -19,6 +19,23 @@
     display: flex;
     flex-direction: column;
     width: 95%;
+    height: 95%;
+}
+
+.newMessage {
+    animation: newMssage 1s ease;
+}
+
+@keyframes newMessage
+{
+  from {
+    margin-top: 300px;
+    opacity: 0;
+  }
+  to {
+    margin-top: 0px;
+    opacity: 1;
+  }
 }
 
 .messages .received {

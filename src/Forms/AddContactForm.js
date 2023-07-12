@@ -52,7 +52,9 @@ const AddContactForm = () => {
             console.log("HERERRE")
             console.log(formData)
           
-            dispatch(addContact(formData))
+            dispatch(addContact(formData));
+            user.contactList.push(formData);
+            
             
             return
         } catch(e){

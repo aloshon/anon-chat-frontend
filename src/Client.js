@@ -10,6 +10,7 @@ import "./Client.css";
 import Message from "./Message";
 import Popup from "./Popup";
 import {useSelector} from "react-redux";
+import {io} from "socket.io-client"
 
 const Client = () => {
     /** get the groupchat from the database using the unique_id,
@@ -46,27 +47,30 @@ const Client = () => {
     const [sendMessage, setSendMessage] = useState(false);
     const [showGuests, setShowGuests] = useState(false);
     const [showLoading, setShowLoading] = useState(false);
+    const [animate, setAnimate] = useState(false);
 
-    const [ws, setWs] = useState(null);
+    const [socket, setSocket] = useState(io(process.env.REACT_APP_BASE_URL || "http://localhost:3001"));
 
     useEffect(() => {
-        if (ws === null) {
+        if (socket === null) {
             /** The localhost url is only for development */
-            // setWs(new WebSocket(`ws://localhost:3001/chat/${id}`)); 
-            setWs(new WebSocket(`wss://worker-production-cb67.up.railway.app/chat/${id}`));
+            // setSocket(io(`ws://localhost:3001/chat/${id}`));
+            setSocket(io(process.env.REACT_APP_BASE_URL || "http://localhost:3001"))
         }
+        console.log(id)
+        socket.emit('joinroom', {roomId: id});
         return () => {
             // A function returned from useEffect will
             // get called on component unmount. i.e. when user leaves page
-            // Just make sure ws is defined to avoid errors
-            if(ws){
-                console.log("closing ws due to unmount!");
+            // Just make sure socket is defined to avoid errors
+            if(socket){
+                console.log("closing socket due to unmount!");
             
-                ws.close();
-                setWs(null);
+                socket.close();
+                setSocket(null);
             }
         }
-    }, [ws, setWs]);
+    }, [socket, setSocket]);
 
     useEffect(() => {
         async function getRoomOnRender(){
@@ -76,14 +80,16 @@ const Client = () => {
     
                 setMessages(oldMessages);
                 setRoom(groupChat);
+                console.log(socket);
                 if(lastMessageRef.current && oldMessages.length > 7){
-                    window.scroll(0, window.innerHeight + window.scrollY + 20); // slightly above bottom
+                    // window.scroll(0, window.innerHeight + window.scrollY + 20); // slightly above bottom
                     lastMessageRef.current.scrollIntoView({ behavior: "smooth", block: "center" });
                 } else {
                     window.scroll(0, 0); // scroll to top
                 }
                 
             } catch(e){
+                console.log(e)
                 alert(e[0]);
                 if(e[0] === "Not invited in this group chat!"){
                     history.push('/');
@@ -96,14 +102,18 @@ const Client = () => {
     }, [user]);
 
     useEffect(() => {
-        // wait for ws to be established
-        while(!ws) return;
-        // when ws connection is open and someone sends a message
-        ws.onmessage = function(evt){
+        // wait for socket to be established
+        // while(!socket || !socket.connected) return;
+        console.log(socket)
+        // when socket connection is open and someone sends a message
+        const onMessage = (msg, id) => {
             try {
-                const user_id = parseInt(evt.data.split(" ")[0]);
+                console.log(msg);
+                const user_id = parseInt(msg.split(" ")[0]);
                 // Get everything besides the user id
-                const message = evt.data.substr(evt.data.indexOf(' ')+1);
+                const message = msg.substr(msg.indexOf(' ')+1);
+                console.log(message)
+                console.log(user_id);
                 const currentTime = new Date();
                 const currentUTC = currentTime.toUTCString();
                 const timestamp = new Date(currentUTC);
@@ -114,7 +124,10 @@ const Client = () => {
                 // scroll them to the bottom
                 if((window.innerHeight + window.scrollY + 20) >= document.body.scrollHeight){
                     lastMessageRef.current.scrollIntoView({behavior: "smooth"});
+                    // chatMessages.scrollTop = chatMessages.scrollHeight;
                 }
+                setAnimate(true);
+                setTimeout(() => { setAnimate( false ) }, 500);
 
             } catch(e){
                 console.log(e);
@@ -122,19 +135,30 @@ const Client = () => {
             }
         }
 
-        ws.onclose = function(evt){
+        const onClose = () => {
             console.log("DISCONNECTED!!");
             // Wait for socket to close and then reconnect
 
             /** The localhost url is only for development */
-            // setTimeout(setWs(new WebSocket(`ws://localhost:3001/chat/${id}`)), 1000); 
-            setTimeout(setWs(new WebSocket(`wss://worker-production-cb67.up.railway.app/chat/${id}`)), 1000);
-        };
-
-        ws.onerror = function(evt){
-            console.log(evt);
+            setTimeout(setSocket(io(process.env.REACT_APP_BASE_URL || "http://localhost:3001")), 1000); 
+            // setTimeout(setSocket(io(process.env.REACT_APP_BASE_URL || "http://localhost:3001")), 1000);
         }
-    }, [ws])
+        socket.on("message", onMessage);
+
+        socket.on("close", onClose);
+
+        socket.on("error", function(evt){
+            console.log(evt);
+        })
+
+        return () => {
+            socket.off('message', onMessage);
+            socket.off('close', onClose);
+            socket.off('error', function(evt){
+                console.log(evt);
+            });
+          };
+    }, [])
 
     useEffect(() => {
         async function postMessageToAPI() {
@@ -155,8 +179,8 @@ const Client = () => {
         if(sendMessage){
             // add user_id to the start of the message string
             const message = `${user.id} ` + formData.message;
-            // wait for ws state to be ready to send message
-            ws.send(message);
+            // wait for socket state to be ready to send message
+            socket.emit("message", message, id);
             postMessageToAPI();
             resetFormData();
             // disable the send button for half a second
@@ -164,7 +188,7 @@ const Client = () => {
                 setSendMessage(false)
             }, 500);
         }
-    }, [sendMessage, ws])
+    }, [sendMessage, socket])
     
 
     // If the user is not scrolled to the bottom of the page after
@@ -172,6 +196,7 @@ const Client = () => {
     useEffect(() => {
         if(lastMessageRef.current && sendMessage){
             if(messages.length > 5){
+                
                 lastMessageRef.current.scrollIntoView({behavior: "smooth"});
             }
         }
@@ -190,7 +215,7 @@ const Client = () => {
                     if(olderMessages.length > 0){
                         setMessages((messages) => [...olderMessages, ...messages]);
                         if(topMessageRef.current){
-                            topMessageRef.current.scrollIntoView();
+                            topMessageRef.current.scrollIntoView({behavior: "smooth"});
                         }
                     }
                     setShowLoading(false);
@@ -203,7 +228,7 @@ const Client = () => {
 
 
     const goBackHome = () => {
-        ws.close();
+        socket.close();
         history.push("/");
     }
 
@@ -223,24 +248,25 @@ const Client = () => {
             </Button>
             </div>
             {showLoading && <div className="loading-old-messages">Loading...</div>}
-            <Container className="messages" fluid>
+            <div className="messages">
                 {messages.map((m, index) => {
                     // checks the length of messages to see if message is at end of list
                     // Reference that to scroll to bottom
                     const lastMessage = messages.length - 1 === index;
                     let timestamp = new Date(m.timestamp).toLocaleTimeString();
+                    const key = Math.random().toString(36).substring(7);
                     // Because we get 25 at a time, after getting new messages if the list is not divisible by 25,
                     // this means there no more messages, adjust topMessageRef.
                     // So the user stays on the same message after last messages are loaded on top
-                    // 24 is the default that allows the user to stay on the same spot as more load on top
+                    // 24 is the default that allosocket the user to stay on the same spot as more load on top
                     const topMessageOffset = messages.length % 25 !== 0 ? (messages.length % 25 - 1) : 24;
                     
                     return (
                         <div ref={lastMessage ? lastMessageRef : index === topMessageOffset ? topMessageRef : null} 
-                        key={index}
+                        key={key}
                         style={{backgroundColor: m.user_id === user.id ? darkMode.card : darkMode.received}}
                         className={`${m.user_id === user.id ?
-                            'sent' : 'received'}`}>
+                            'sent' : 'received'} ${animate ? "newMessage" : ""}`}>
                             <Message
                                 message={m.message}
                                 timestamp={timestamp}>
@@ -260,7 +286,7 @@ const Client = () => {
                     }
                     handleClose={() => setShowGuests(false)}
                 />}
-            </Container>
+            </div>
             <div className="send-message-form">
                 <Form onSubmit={(e) => {
                     e.preventDefault()
