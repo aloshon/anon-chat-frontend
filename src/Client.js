@@ -76,12 +76,11 @@ const Client = () => {
     
                 setMessages(oldMessages);
                 setRoom(groupChat);
-                if(lastMessageRef.current){
-                    lastMessageRef.current.scrollIntoView({ behavior: "smooth" });
-                    // window.scroll(0, window.innerHeight + window.scrollY + 20); // slightly above bottom
-                }
-                if(oldMessages.length < 7){
-                    window.scroll(0,0);
+                if(lastMessageRef.current && oldMessages.length > 7){
+                    window.scroll(0, window.innerHeight + window.scrollY + 20); // slightly above bottom
+                    lastMessageRef.current.scrollIntoView({ behavior: "smooth", block: "center" });
+                } else {
+                    window.scroll(0, 0); // scroll to top
                 }
                 
             } catch(e){
@@ -237,7 +236,7 @@ const Client = () => {
                     const topMessageOffset = messages.length % 25 !== 0 ? (messages.length % 25 - 1) : 24;
                     
                     return (
-                        <div ref={index === topMessageOffset ? topMessageRef : null} 
+                        <div ref={lastMessage ? lastMessageRef : index === topMessageOffset ? topMessageRef : null} 
                         key={index}
                         style={{backgroundColor: m.user_id === user.id ? darkMode.card : darkMode.received}}
                         className={`${m.user_id === user.id ?
@@ -261,7 +260,6 @@ const Client = () => {
                     }
                     handleClose={() => setShowGuests(false)}
                 />}
-                <div ref={lastMessageRef}></div>
             </Container>
             <div className="send-message-form">
                 <Form onSubmit={(e) => {
