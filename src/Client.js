@@ -49,14 +49,9 @@ const Client = () => {
     const [showLoading, setShowLoading] = useState(false);
     const [animate, setAnimate] = useState(false);
 
-    const [socket, setSocket] = useState(io(process.env.REACT_APP_BASE_URL || "http://localhost:3001"));
+    const socket = useRef(io(process.env.REACT_APP_BASE_URL || "http://localhost:3001")).current;
 
     useEffect(() => {
-        if (socket === null) {
-            /** The localhost url is only for development */
-            // setSocket(io(`ws://localhost:3001/chat/${id}`));
-            setSocket(io(process.env.REACT_APP_BASE_URL || "http://localhost:3001"))
-        }
         console.log(id)
         socket.emit('joinroom', {roomId: id});
         return () => {
@@ -67,10 +62,9 @@ const Client = () => {
                 console.log("closing socket due to unmount!");
             
                 socket.close();
-                setSocket(null);
             }
         }
-    }, [socket, setSocket]);
+    }, [socket]);
 
     useEffect(() => {
         async function getRoomOnRender(){
@@ -138,9 +132,10 @@ const Client = () => {
         const onClose = () => {
             console.log("DISCONNECTED!!");
             // Wait for socket to close and then reconnect
+            socket.close();
 
             /** The localhost url is only for development */
-            setTimeout(setSocket(io(process.env.REACT_APP_BASE_URL || "http://localhost:3001")), 1000); 
+            // setTimeout(setSocket(io(process.env.REACT_APP_BASE_URL || "http://localhost:3001")), 1000); 
             // setTimeout(setSocket(io(process.env.REACT_APP_BASE_URL || "http://localhost:3001")), 1000);
         }
         socket.on("message", onMessage);
