@@ -77,8 +77,8 @@ const Client = () => {
                 setMessages(oldMessages);
                 setRoom(groupChat);
                 if(lastMessageRef.current){
-                    lastMessageRef.current.scrollIntoView({ smooth: true });
-                    window.scroll(0, window.innerHeight + window.scrollY + 20); // slightly above bottom
+                    lastMessageRef.current.scrollIntoView({ behavior: "smooth" });
+                    // window.scroll(0, window.innerHeight + window.scrollY + 20); // slightly above bottom
                 }
                 if(oldMessages.length < 7){
                     window.scroll(0,0);
@@ -114,9 +114,7 @@ const Client = () => {
                 // If user is near the bottom of screen and someone sends a message,
                 // scroll them to the bottom
                 if((window.innerHeight + window.scrollY + 20) >= document.body.scrollHeight){
-                    if(messages.length > 5){
-                        lastMessageRef.current.scrollIntoView({behavior: "smooth", block: "end"});
-                    }
+                    lastMessageRef.current.scrollIntoView({behavior: "smooth"});
                 }
 
             } catch(e){
@@ -239,7 +237,7 @@ const Client = () => {
                     const topMessageOffset = messages.length % 25 !== 0 ? (messages.length % 25 - 1) : 24;
                     
                     return (
-                        <div ref={lastMessage ? lastMessageRef : index === topMessageOffset ? topMessageRef : null} 
+                        <div ref={index === topMessageOffset ? topMessageRef : null} 
                         key={index}
                         style={{backgroundColor: m.user_id === user.id ? darkMode.card : darkMode.received}}
                         className={`${m.user_id === user.id ?
@@ -263,6 +261,7 @@ const Client = () => {
                     }
                     handleClose={() => setShowGuests(false)}
                 />}
+                <div ref={lastMessageRef}></div>
             </Container>
             <div className="send-message-form">
                 <Form onSubmit={(e) => {
