@@ -210,7 +210,7 @@ const Client = () => {
                     if(olderMessages.length > 0){
                         setMessages((messages) => [...olderMessages, ...messages]);
                         if(topMessageRef.current){
-                            topMessageRef.current.scrollIntoView({behavior: "smooth"});
+                            topMessageRef.current.scrollIntoView({behavior: "instant", block: "start"});
                         }
                     }
                     setShowLoading(false);
