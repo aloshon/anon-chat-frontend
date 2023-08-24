@@ -23,7 +23,6 @@ const Client = () => {
      * top message is referenced so when the user scrolls up to the top,
      * it calls the backend for the next 25 messages and keeps the same screen
      * 
-     * NO REDUX HERE DUE TO RERENDERS
      */
     // id is the unique_id similar to uuid() rather than room.id,
     // which is the incremented primary key
@@ -55,9 +54,6 @@ const Client = () => {
         console.log(id)
         socket.emit('joinroom', {roomId: id});
         return () => {
-            // A function returned from useEffect will
-            // get called on component unmount. i.e. when user leaves page
-            // Just make sure socket is defined to avoid errors
             if(socket){
                 console.log("closing socket due to unmount!");
             
@@ -76,7 +72,6 @@ const Client = () => {
                 setRoom(groupChat);
                 console.log(socket);
                 if(lastMessageRef.current && oldMessages.length > 7){
-                    // window.scroll(0, window.innerHeight + window.scrollY + 20); // slightly above bottom
                     lastMessageRef.current.scrollIntoView({ behavior: "smooth", block: "center" });
                 } else {
                     window.scroll(0, 0); // scroll to top
@@ -96,9 +91,6 @@ const Client = () => {
     }, [user]);
 
     useEffect(() => {
-        // wait for socket to be established
-        // while(!socket || !socket.connected) return;
-        console.log(socket)
         // when socket connection is open and someone sends a message
         const onMessage = (msg, id) => {
             try {
@@ -118,7 +110,6 @@ const Client = () => {
                 // scroll them to the bottom
                 if((window.innerHeight + window.scrollY + 20) >= document.body.scrollHeight){
                     lastMessageRef.current.scrollIntoView({behavior: "smooth"});
-                    // chatMessages.scrollTop = chatMessages.scrollHeight;
                 }
                 setAnimate(true);
                 setTimeout(() => { setAnimate( false ) }, 500);
@@ -133,10 +124,6 @@ const Client = () => {
             console.log("DISCONNECTED!!");
             // Wait for socket to close and then reconnect
             socket.close();
-
-            /** The localhost url is only for development */
-            // setTimeout(setSocket(io(process.env.REACT_APP_BASE_URL || "http://localhost:3001")), 1000); 
-            // setTimeout(setSocket(io(process.env.REACT_APP_BASE_URL || "http://localhost:3001")), 1000);
         }
         socket.on("message", onMessage);
 
