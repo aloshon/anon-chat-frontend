@@ -12,6 +12,7 @@ function App() {
   const [user, setUser] = useState(null);
   const [token, setToken] = useLocalStorage("token", null);
   const darkMode = useSelector(state => state.darkMode);
+  console.log(process.env.REACT_APP_BASE_URL)
 
   useEffect(function getUserFromToken() {
     async function getUser() {
